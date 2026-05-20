@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Story Board — Pixel Over People</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=VT323&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #ED1E79;
+    --pink-deep: #B8125D;
+    --yellow: #FFC93C;
+    --yellow-soft: #FFE066;
+    --cream: #FFF4D6;
+    --ink: #1A1410;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Space Mono', monospace;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+    cursor: default;
+  }
+  ::selection { background: var(--ink); color: var(--yellow); }
+
+  /* ── MARQUEE ── */
+  .marquee-bar {
+    background: var(--ink);
+    color: var(--yellow);
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    letter-spacing: .15em;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--pink);
+  }
+  .marquee-bar span {
+    display: inline-block;
+    animation: scroll 28s linear infinite;
+    padding-right: 60px;
+  }
+  @keyframes scroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--pink);
+    padding: 60px 5vw 50px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 4px solid var(--ink);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--yellow-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--yellow-soft) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: .15;
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative; z-index: 2;
+    max-width: 1300px; margin: 0 auto;
+    display: flex; align-items: flex-end;
+    justify-content: space-between; flex-wrap: wrap; gap: 24px;
+  }
+  .img-missing { width:100%; aspect-ratio:16/10; background:#ffe5e5; border:3px dashed #d00; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:16px; font-family:'VT323',monospace; color:#900; gap:8px; }
+  .img-missing .ttl { font-size:18px; font-weight:bold; letter-spacing:.1em; }
+  .img-missing code { background:#fff; color:#d00; padding:4px 10px; border:2px solid #d00; font-size:14px; word-break:break-all; }
+  .img-missing .hint { font-size:12px; opacity:.75; max-width:280px; line-height:1.4; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ink); color: var(--cream);
+    text-decoration: none;
+    font-family: 'VT323', monospace; font-size: 18px; letter-spacing: .1em;
+    padding: 10px 20px;
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--yellow);
+    transition: all .2s;
+  }
+  .back-btn:hover { background: var(--yellow); color: var(--ink); box-shadow: 6px 6px 0 var(--ink); }
+  .hero-text { flex: 1; min-width: 260px; }
+  .hero-tag {
+    display: inline-block;
+    background: var(--yellow); color: var(--ink);
+    padding: 6px 16px;
+    font-family: 'VT323', monospace; font-size: 22px; letter-spacing: .1em;
+    border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);
+    transform: rotate(-2deg); margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: 'Bowlby One', sans-serif;
+    font-size: clamp(48px, 10vw, 120px);
+    line-height: .88; letter-spacing: -.04em;
+    color: var(--cream);
+    -webkit-text-stroke: 2px var(--ink);
+    text-shadow: 6px 6px 0 var(--ink);
+  }
+  .hero-title .accent { color: var(--yellow); }
+  .hero-sub {
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-size: clamp(16px, 2.5vw, 22px);
+    color: var(--cream); margin-top: 14px; opacity: .9;
+  }
+  .hero-meta {
+    font-family: 'VT323', monospace; font-size: 16px;
+    color: var(--cream); letter-spacing: .1em;
+    text-align: right;
+  }
+  .hero-meta strong { color: var(--yellow); font-size: 28px; display: block; }
+
+  /* ── SCENE COUNTER STRIP ── */
+  .strip {
+    background: var(--ink); color: var(--cream);
+    padding: 14px 5vw;
+    display: flex; align-items: center; gap: 16px;
+    overflow-x: auto; border-bottom: 4px solid var(--yellow);
+  }
+  .strip-label {
+    font-family: 'VT323', monospace; font-size: 18px;
+    color: var(--yellow); letter-spacing: .1em; white-space: nowrap;
+  }
+  .scene-dots { display: flex; gap: 8px; }
+  .scene-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: transparent; border: 2px solid var(--yellow);
+    font-family: 'VT323', monospace; font-size: 15px;
+    color: var(--yellow); display: flex; align-items: center;
+    justify-content: center; cursor: pointer; transition: all .2s;
+    flex-shrink: 0;
+  }
+  .scene-dot:hover, .scene-dot.active { background: var(--pink); border-color: var(--pink); color: var(--cream); }
+
+  /* ── GRID ── */
+  .gallery-section {
+    max-width: 1400px; margin: 0 auto;
+    padding: 60px 5vw;
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 28px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--ink);
+    border: 3px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--pink);
+    cursor: pointer; overflow: hidden;
+    transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
+    opacity: 0; transform: translateY(30px);
+  }
+  .card.visible {
+    opacity: 1; transform: translateY(0);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.34,1.56,.64,1), box-shadow .25s, outline .2s;
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: 12px 12px 0 var(--yellow); }
+  .card-img-wrap {
+    position: relative; overflow: hidden;
+    aspect-ratio: 16/9;
+  }
+  .card-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform .4s ease;
+    filter: grayscale(10%);
+  }
+  .card:hover .card-img-wrap img { transform: scale(1.04); filter: grayscale(0%); }
+  .card-badge {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--pink); color: var(--cream);
+    font-family: 'VT323', monospace; font-size: 18px; letter-spacing: .1em;
+    padding: 4px 12px; border: 2px solid var(--ink);
+  }
+  .card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,20,16,.85) 0%, transparent 55%);
+    opacity: 0; transition: opacity .3s;
+    display: flex; align-items: flex-end; padding: 16px;
+  }
+  .card:hover .card-overlay { opacity: 1; }
+  .overlay-zoom {
+    background: var(--yellow); color: var(--ink);
+    font-family: 'VT323', monospace; font-size: 18px;
+    padding: 6px 16px; border: 2px solid var(--ink);
+  }
+  .card-body { padding: 16px 18px 18px; }
+  .card-scene {
+    font-family: 'VT323', monospace; font-size: 14px;
+    color: var(--pink); letter-spacing: .12em; margin-bottom: 4px;
+  }
+  .card-title {
+    font-family: 'Bowlby One', sans-serif;
+    font-size: 18px; color: var(--cream); letter-spacing: -.02em;
+    margin-bottom: 8px;
+  }
+  .card-caption {
+    font-size: 11px; color: #9a8a7a;
+    line-height: 1.6;
+  }
+
+  /* ── LIGHTBOX ── */
+  .lb-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(26,20,16,.95);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s;
+    padding: 20px;
+  }
+  .lb-overlay.open { opacity: 1; pointer-events: all; }
+  .lb-box {
+    position: relative; max-width: 1100px; width: 100%;
+    transform: scale(.93);
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .lb-overlay.open .lb-box { transform: scale(1); }
+  .lb-img-wrap {
+    position: relative; border: 4px solid var(--yellow);
+    box-shadow: 12px 12px 0 var(--pink);
+    background: var(--ink);
+  }
+  .lb-img-wrap img {
+    width: 100%; display: block;
+    max-height: 75vh; object-fit: contain;
+  }
+  .lb-close {
+    position: absolute; top: -18px; right: -18px;
+    width: 42px; height: 42px;
+    background: var(--pink); border: 3px solid var(--ink);
+    color: var(--cream); font-size: 22px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    z-index: 10; transition: background .2s;
+  }
+  .lb-close:hover { background: var(--yellow); color: var(--ink); }
+  .lb-info {
+    margin-top: 16px; display: flex;
+    justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .lb-title-block { }
+  .lb-scene-tag {
+    font-family: 'VT323', monospace; font-size: 16px;
+    color: var(--pink); letter-spacing: .12em;
+  }
+  .lb-title {
+    font-family: 'Bowlby One', sans-serif;
+    font-size: clamp(20px, 3vw, 28px); color: var(--cream);
+    letter-spacing: -.02em; margin-top: 2px;
+  }
+  .lb-caption {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: #9a8a7a;
+    max-width: 420px; line-height: 1.6;
+  }
+  .lb-nav { display: flex; gap: 10px; }
+  .lb-btn {
+    background: var(--ink); color: var(--cream);
+    border: 2px solid var(--yellow);
+    font-family: 'VT323', monospace; font-size: 20px;
+    padding: 8px 18px; cursor: pointer;
+    transition: all .2s; letter-spacing: .05em;
+  }
+  .lb-btn:hover { background: var(--yellow); color: var(--ink); border-color: var(--ink); }
+  .lb-counter {
+    font-family: 'VT323', monospace; font-size: 18px;
+    color: var(--yellow); align-self: center;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: var(--cream);
+    border-top: 4px solid var(--yellow);
+    padding: 30px 5vw;
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 16px;
+    font-family: 'VT323', monospace; font-size: 16px; letter-spacing: .1em;
+  }
+  footer a {
+    color: var(--yellow); text-decoration: none;
+    transition: color .2s;
+  }
+  footer a:hover { color: var(--pink); }
+
+  @media (max-width: 600px) {
+    .gallery-grid { grid-template-columns: 1fr; }
+    .hero-meta { text-align: left; }
+    .lb-info { flex-direction: column; }
+    .lb-nav { align-self: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <span>🎬 STORY BOARD ✦ THE COIN OF KINDNESS ✦ PIXEL OVER PEOPLE ✦ 2D ANIMATION ✦ STORYBOARD ART ✦ JIGAR JAROLI ✦ 🎬 STORY BOARD ✦ THE COIN OF KINDNESS ✦ PIXEL OVER PEOPLE ✦ 2D ANIMATION ✦ STORYBOARD ART ✦ JIGAR JAROLI ✦ </span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <a class="back-btn" href="../../index.html">← Back to Portfolio</a>
+      <br><br>
+      <div class="hero-tag">01 / SELECTED WORK</div>
+      <h1 class="hero-title">Story<br><span class="accent">Board</span></h1>
+      <p class="hero-sub">The Coin of Kindness — A medieval tale about kindness &amp; community</p>
+    </div>
+    <div class="hero-meta">
+      <strong>10</strong>
+      SCENES
+      <br><br>
+      <strong>2D</strong>
+      ANIMATION
+    </div>
+  </div>
+</section>
+
+<!-- SCENE NAV STRIP -->
+<div class="strip">
+  <span class="strip-label">JUMP TO SCENE —</span>
+  <div class="scene-dots" id="sceneDots"></div>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lb-overlay" id="lightbox">
+  <div class="lb-box">
+    <div class="lb-img-wrap">
+      <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+      <img id="lbImg" src="" alt=""/>
+    </div>
+    <div class="lb-info">
+      <div class="lb-title-block">
+        <div class="lb-scene-tag" id="lbScene"></div>
+        <div class="lb-title" id="lbTitle"></div>
+        <div class="lb-caption" id="lbCaption"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <div class="lb-counter" id="lbCounter"></div>
+        <div class="lb-nav">
+          <button class="lb-btn" id="lbPrev">← PREV</button>
+          <button class="lb-btn" id="lbNext">NEXT →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>© 2026 JIGAR JAROLI — PIXEL OVER PEOPLE</div>
+  <div>
+    <a href="../../index.html">← PORTFOLIO</a>
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <a href="mailto:pixeloverpeople@gmail.com">EMAIL ↗</a>
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <a href="https://www.instagram.com/pixel_over_people" target="_blank">INSTAGRAM ↗</a>
+  </div>
+</footer>
+
+<script>
+const scenes = [
+  {
+    img: "sketch_slide_1.jpg",
+    scene: "SCENE 01",
+    title: "The Kingdom Market",
+    caption: "A busy medieval marketplace. Two shopkeepers glare at each other, a child refuses to share a toy, while a farmer and traveller look on."
+  },
+  {
+    img: "sketch_slide_2.jpg",
+    scene: "SCENE 02",
+    title: "The King Observes",
+    caption: "The King watches the unhappy people from his palace window, troubled by what he sees."
+  },
+  {
+    img: "sketch_slide_3.jpg",
+    scene: "SCENE 03",
+    title: "A Royal Idea",
+    caption: "A lightbulb moment! The King hatches a brilliant plan to spread kindness across the kingdom."
+  },
+  {
+    img: "sketch_slide_4.jpg",
+    scene: "SCENE 04",
+    title: "The Royal Decree",
+    caption: "The King gathers everyone in the town square: \"Whenever you are kind to someone, you will receive a Coin of Kindness!\""
+  },
+  {
+    img: "sketch_slide_5.jpg",
+    scene: "SCENE 05",
+    title: "A Child's Joy",
+    caption: "A child jumps up happily upon hearing the King's exciting announcement."
+  },
+  {
+    img: "sketch_slide_6.jpg",
+    scene: "SCENE 06",
+    title: "Neighbours Wave",
+    caption: "A woman waves cheerfully to a neighbour — kindness is already beginning to spread through the streets."
+  },
+  {
+    img: "sketch_slide_7.jpg",
+    scene: "SCENE 07",
+    title: "Teamwork at the Market",
+    caption: "Two kids lift a heavy basket of vegetables together, while a man cheers them on from his stall."
+  },
+  {
+    img: "sketch_slide_8.jpg",
+    scene: "SCENE 08",
+    title: "Acts of Kindness Bloom",
+    caption: "People are now smiling. A woman shares rice with an old man, a farmer hands water to a thirsty traveller, and a child says thank you."
+  },
+  {
+    img: "sketch_slide_9.jpg",
+    scene: "SCENE 09",
+    title: "The King Watches",
+    caption: "The King watches his people through a telescope from his throne room, flanked by royal guards — and smiles with joy."
+  },
+  {
+    img: "sketch_slide_10.jpg",
+    scene: "SCENE 10",
+    title: "A Brighter Kingdom",
+    caption: "The kingdom is now brighter and more colourful — children play, neighbours greet one another, and joy fills every corner of the realm."
+  }
+];
+
+// Build scene dots
+const dotsWrap = document.getElementById('sceneDots');
+scenes.forEach((s, i) => {
+  const d = document.createElement('button');
+  d.className = 'scene-dot';
+  d.textContent = i + 1;
+  d.setAttribute('aria-label', s.title);
+  d.addEventListener('click', () => openLightbox(i));
+  dotsWrap.appendChild(d);
+});
+
+// Build cards
+const grid = document.getElementById('galleryGrid');
+scenes.forEach((s, i) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-img-wrap">
+      <img src="${s.img}" alt="${s.title}" loading="lazy" onerror="this.outerHTML='&lt;div class=\\'img-missing\\'&gt;&lt;div class=ttl&gt;⚠ IMAGE MISSING&lt;/div&gt;&lt;code&gt;${s.img}&lt;/code&gt;&lt;div class=hint&gt;Upload this file (exact name, lowercase) into the /work/storyboard/ folder on GitHub.&lt;/div&gt;&lt;/div&gt;'"/>
+      <div class="card-badge">${s.scene}</div>
+      <div class="card-overlay"><span class="overlay-zoom">VIEW FULL ↗</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-scene">■ ${s.scene}</div>
+      <div class="card-title">${s.title}</div>
+      <div class="card-caption">${s.caption}</div>
+    </div>
+  `;
+  card.addEventListener('click', () => openLightbox(i));
+  card.style.transitionDelay = (i * 0.06) + 's';
+  grid.appendChild(card);
+});
+
+// Intersection observer for card reveals
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.card').forEach(c => io.observe(c));
+
+// Lightbox
+let current = 0;
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbScene = document.getElementById('lbScene');
+const lbTitle = document.getElementById('lbTitle');
+const lbCaption = document.getElementById('lbCaption');
+const lbCounter = document.getElementById('lbCounter');
+
+function openLightbox(idx) {
+  current = idx;
+  updateLightbox();
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function updateLightbox() {
+  const s = scenes[current];
+  lbImg.src = s.img;
+  lbImg.alt = s.title;
+  lbScene.textContent = '■ ' + s.scene;
+  lbTitle.textContent = s.title;
+  lbCaption.textContent = s.caption;
+  lbCounter.textContent = (current + 1) + ' / ' + scenes.length;
+  // Update dots
+  document.querySelectorAll('.scene-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === current);
+  });
+}
+
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+document.getElementById('lbPrev').addEventListener('click', () => { current = (current - 1 + scenes.length) % scenes.length; updateLightbox(); });
+document.getElementById('lbNext').addEventListener('click', () => { current = (current + 1) % scenes.length; updateLightbox(); });
+lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') { current = (current - 1 + scenes.length) % scenes.length; updateLightbox(); }
+  if (e.key === 'ArrowRight') { current = (current + 1) % scenes.length; updateLightbox(); }
+});
+</script>
+
+</body>
+</html>
