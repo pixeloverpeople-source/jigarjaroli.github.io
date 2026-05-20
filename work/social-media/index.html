@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Social Media — Pixel Over People</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=VT323&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #ED1E79; --yellow: #FFC93C;
+    --cream: #FFF4D6; --ink: #1A1410;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Space Mono',monospace;background:var(--cream);color:var(--ink);overflow-x:hidden}
+  ::selection{background:var(--ink);color:var(--yellow)}
+
+  /* MARQUEE */
+  .marquee-bar{background:var(--ink);color:var(--pink);padding:10px 0;overflow:hidden;white-space:nowrap;font-family:'VT323',monospace;font-size:20px;letter-spacing:.15em;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--yellow)}
+  .marquee-bar span{display:inline-block;animation:scroll 40s linear infinite;padding-right:60px}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* HERO */
+  .hero{background:var(--pink);padding:60px 5vw 50px;position:relative;overflow:hidden;border-bottom:4px solid var(--ink)}
+  .hero-dots{position:absolute;inset:0;background-image:radial-gradient(var(--ink) 1.5px,transparent 1.5px);background-size:30px 30px;opacity:.12;pointer-events:none}
+  .hero-inner{position:relative;z-index:2;max-width:1300px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  .back-btn{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--yellow);text-decoration:none;font-family:'VT323',monospace;font-size:18px;letter-spacing:.1em;padding:10px 20px;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--yellow);transition:all .2s}
+  .back-btn:hover{background:var(--yellow);color:var(--ink);box-shadow:6px 6px 0 var(--ink)}
+  .hero-tag{display:inline-block;background:var(--yellow);color:var(--ink);padding:6px 16px;font-family:'VT323',monospace;font-size:22px;letter-spacing:.1em;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transform:rotate(-1.5deg);margin-bottom:16px}
+  .hero-title{font-family:'Bowlby One',sans-serif;font-size:clamp(42px,9vw,110px);line-height:.88;letter-spacing:-.04em;color:var(--cream);text-shadow:5px 5px 0 var(--ink)}
+  .hero-title .accent{color:var(--yellow)}
+  .hero-sub{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(15px,2vw,20px);color:var(--ink);margin-top:14px;opacity:.85}
+  .hero-meta{font-family:'VT323',monospace;font-size:16px;color:var(--ink);letter-spacing:.1em;text-align:right}
+  .hero-meta strong{color:var(--cream);font-size:28px;display:block;text-shadow:2px 2px 0 var(--ink)}
+
+  /* FILTER */
+  .filter-bar{background:var(--yellow);border-bottom:4px solid var(--ink);padding:14px 5vw;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .filter-label{font-family:'VT323',monospace;font-size:18px;letter-spacing:.1em;color:var(--ink)}
+  .filter-btn{background:transparent;color:var(--ink);border:2px solid var(--ink);font-family:'VT323',monospace;font-size:15px;letter-spacing:.08em;padding:5px 14px;cursor:pointer;transition:all .2s}
+  .filter-btn:hover,.filter-btn.active{background:var(--ink);color:var(--yellow)}
+
+  /* COUNT */
+  .count-strip{background:var(--ink);color:var(--yellow);padding:10px 5vw;font-family:'VT323',monospace;font-size:16px;letter-spacing:.1em;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--pink)}
+
+  /* GALLERY */
+  .gallery-section{max-width:1400px;margin:0 auto;padding:48px 5vw}
+
+  /* SECTION LABEL */
+  .section-label{font-family:'Bowlby One',sans-serif;font-size:13px;letter-spacing:.15em;color:var(--pink);margin-bottom:16px;margin-top:40px;padding-bottom:8px;border-bottom:2px dashed var(--pink);opacity:.7}
+  .section-label:first-child{margin-top:0}
+
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+
+  /* CARD BASE */
+  .card{background:var(--ink);border:3px solid var(--ink);box-shadow:7px 7px 0 var(--pink);cursor:pointer;overflow:hidden;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;opacity:0;transform:translateY(28px)}
+  .card.visible{opacity:1;transform:translateY(0);transition:opacity .5s ease,transform .5s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
+  .card:hover{transform:translateY(-5px) scale(1.01);box-shadow:10px 10px 0 var(--yellow)}
+  .card.hidden{display:none}
+
+  /* CARD THUMB - single image */
+  .card-thumb{position:relative;overflow:hidden;aspect-ratio:4/5;background:#111}
+  .card-thumb.landscape{aspect-ratio:16/9}
+  .card-thumb.square{aspect-ratio:1}
+  .card-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+  .card:hover .card-thumb img{transform:scale(1.06)}
+  .type-badge{position:absolute;top:10px;right:10px;background:var(--pink);color:var(--cream);font-family:'VT323',monospace;font-size:13px;letter-spacing:.1em;padding:3px 8px;border:2px solid var(--ink)}
+
+  /* CAROUSEL CARD */
+  .carousel-wrap{position:relative;overflow:hidden;aspect-ratio:4/5;background:#111}
+  .carousel-wrap.story-ratio{aspect-ratio:9/16}
+  .carousel-slides{display:flex;transition:transform .35s cubic-bezier(.4,0,.2,1)}
+  .carousel-slide{min-width:100%;height:100%;flex-shrink:0}
+  .carousel-slide img{width:100%;height:100%;object-fit:cover;display:block}
+  .car-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(26,20,16,.7);color:var(--yellow);border:2px solid var(--yellow);width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;font-weight:700;z-index:5;transition:background .2s;line-height:1}
+  .car-btn:hover{background:var(--yellow);color:var(--ink)}
+  .car-prev{left:8px}
+  .car-next{right:8px}
+  .car-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:5}
+  .car-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.6);transition:background .2s;cursor:pointer}
+  .car-dot.active{background:var(--yellow);border-color:var(--yellow)}
+  .car-counter{position:absolute;top:10px;left:10px;background:var(--ink);color:var(--yellow);font-family:'VT323',monospace;font-size:14px;letter-spacing:.08em;padding:3px 8px;border:2px solid var(--yellow);z-index:5}
+  .carousel-badge{position:absolute;top:10px;right:10px;background:var(--yellow);color:var(--ink);font-family:'VT323',monospace;font-size:13px;letter-spacing:.1em;padding:3px 8px;border:2px solid var(--ink);z-index:5;display:flex;align-items:center;gap:4px}
+  .zoom-overlay{position:absolute;inset:0;z-index:4;cursor:zoom-in}
+
+  /* CARD BODY */
+  .card-body{padding:14px 16px 16px}
+  .card-num{font-family:'VT323',monospace;font-size:13px;color:var(--pink);letter-spacing:.12em;margin-bottom:3px}
+  .card-title{font-family:'Bowlby One',sans-serif;font-size:15px;color:var(--cream);margin-bottom:4px;letter-spacing:-.01em}
+  .card-sub{font-family:'Space Mono',monospace;font-size:10px;color:#6a5a4a;margin-bottom:6px;line-height:1.5}
+  .card-tags{display:flex;gap:6px;flex-wrap:wrap}
+  .tag{font-family:'VT323',monospace;font-size:13px;background:rgba(255,201,60,.15);color:var(--yellow);padding:2px 7px;border:1px solid rgba(255,201,60,.4)}
+
+  .img-missing{width:100%;aspect-ratio:4/5;background:#ffe5e5;border:3px dashed #d00;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;font-family:'VT323',monospace;color:#900;gap:8px}
+  .img-missing.landscape{aspect-ratio:16/9}
+  .img-missing.square{aspect-ratio:1}
+  .img-missing .ttl{font-size:16px;font-weight:bold;letter-spacing:.1em}
+  .img-missing code{background:#fff;color:#d00;padding:4px 8px;border:2px solid #d00;font-size:12px;word-break:break-all}
+  .img-missing .hint{font-size:11px;opacity:.75;max-width:240px;line-height:1.4}
+
+  /* LIGHTBOX */
+  .lb-overlay{position:fixed;inset:0;z-index:1000;background:rgba(26,20,16,.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px}
+  .lb-overlay.open{opacity:1;pointer-events:all}
+  .lb-box{position:relative;max-width:960px;width:100%;transform:scale(.93);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+  .lb-overlay.open .lb-box{transform:scale(1)}
+  .lb-media-wrap{position:relative;width:100%;border:4px solid var(--yellow);box-shadow:12px 12px 0 var(--pink);background:#000;overflow:hidden}
+  .lb-media-wrap img{width:100%;display:block;max-height:74vh;object-fit:contain}
+  .lb-close{position:absolute;top:-18px;right:-18px;width:42px;height:42px;background:var(--pink);border:3px solid var(--ink);color:var(--cream);font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background .2s}
+  .lb-close:hover{background:var(--yellow);color:var(--ink)}
+  .lb-info{margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  .lb-num{font-family:'VT323',monospace;font-size:15px;color:var(--pink);letter-spacing:.12em}
+  .lb-title{font-family:'Bowlby One',sans-serif;font-size:clamp(16px,2.5vw,24px);color:var(--cream);margin-top:2px}
+  .lb-sub{font-size:11px;color:#6a5a4a;margin-top:3px}
+  .lb-nav{display:flex;gap:10px;align-items:center}
+  .lb-btn{background:var(--ink);color:var(--cream);border:2px solid var(--yellow);font-family:'VT323',monospace;font-size:18px;padding:7px 16px;cursor:pointer;transition:all .2s;letter-spacing:.05em}
+  .lb-btn:hover{background:var(--yellow);color:var(--ink);border-color:var(--ink)}
+  .lb-counter{font-family:'VT323',monospace;font-size:18px;color:var(--yellow)}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:var(--cream);border-top:4px solid var(--pink);padding:28px 5vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;font-family:'VT323',monospace;font-size:16px;letter-spacing:.1em}
+  footer a{color:var(--yellow);text-decoration:none;transition:color .2s}
+  footer a:hover{color:var(--pink)}
+
+  @media(max-width:600px){.gallery-grid{grid-template-columns:1fr}.hero-meta{text-align:left}.lb-info{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<div class="marquee-bar">
+  <span>📲 SOCIAL MEDIA DESIGN ✦ PIXEL OVER PEOPLE ✦ BRAND CONTENT ✦ CAMPAIGN SERIES ✦ EVENT PROMOS ✦ PRODUCT CREATIVES ✦ JIGAR JAROLI ✦ UDAIPUR ✦ 📲 SOCIAL MEDIA DESIGN ✦ PIXEL OVER PEOPLE ✦ BRAND CONTENT ✦ CAMPAIGN SERIES ✦ EVENT PROMOS ✦ PRODUCT CREATIVES ✦ JIGAR JAROLI ✦ UDAIPUR ✦ </span>
+</div>
+
+<section class="hero">
+  <div class="hero-dots"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <a class="back-btn" href="../../index.html">← Back to Portfolio</a>
+      <br><br>
+      <div class="hero-tag">05 / SELECTED WORK</div>
+      <h1 class="hero-title">Social<br><span class="accent">Media.</span></h1>
+      <p class="hero-sub">Brand creatives, campaign series, event promos & product campaigns — designed for scroll-stopping impact</p>
+    </div>
+    <div class="hero-meta">
+      <strong>21</strong>
+      PIECES
+      <br><br>
+      <strong>SM</strong>
+      DESIGN
+    </div>
+  </div>
+</section>
+
+<div class="filter-bar">
+  <span class="filter-label">FILTER —</span>
+  <button class="filter-btn active" data-filter="all">ALL</button>
+  <button class="filter-btn" data-filter="series">SERIES</button>
+  <button class="filter-btn" data-filter="hospitality">HOSPITALITY</button>
+  <button class="filter-btn" data-filter="product">PRODUCT</button>
+  <button class="filter-btn" data-filter="event">EVENT</button>
+  <button class="filter-btn" data-filter="brand">BRAND</button>
+</div>
+
+<div class="count-strip">
+  <span id="countLabel">SHOWING ALL — 21 PIECES</span>
+  <span>CLICK CARD TO OPEN ✦ USE ← → IN LIGHTBOX</span>
+</div>
+
+<section class="gallery-section">
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<div class="lb-overlay" id="lightbox">
+  <div class="lb-box">
+    <div class="lb-media-wrap" id="lbMediaWrap">
+      <button class="lb-close" id="lbClose">✕</button>
+      <img id="lbImg" src="" alt=""/>
+    </div>
+    <div class="lb-info">
+      <div>
+        <div class="lb-num" id="lbNum"></div>
+        <div class="lb-title" id="lbTitle"></div>
+        <div class="lb-sub" id="lbSub"></div>
+      </div>
+      <div class="lb-nav">
+        <span class="lb-counter" id="lbCounter"></span>
+        <button class="lb-btn" id="lbPrev">← PREV</button>
+        <button class="lb-btn" id="lbNext">NEXT →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>© 2026 JIGAR JAROLI — PIXEL OVER PEOPLE</div>
+  <div>
+    <a href="../../index.html">← PORTFOLIO</a>
+    &nbsp;|&nbsp;
+    <a href="mailto:pixeloverpeople@gmail.com">EMAIL ↗</a>
+    &nbsp;|&nbsp;
+    <a href="https://www.instagram.com/pixel_over_people" target="_blank">INSTAGRAM ↗</a>
+  </div>
+</footer>
+
+<script>
+// ── DATA ──
+// Flat lightbox sequence built from all cards
+const lbSequence = []; // filled below
+
+const groups = [
+  // ── CAMPAIGN SERIES ──
+  {
+    id: "true-story",
+    type: "carousel",
+    ratio: "portrait",
+    num: "01",
+    title: "True Story",
+    sub: "Organic Jaggery Campaign — 4-slide series",
+    cats: ["series","product","brand"],
+    slides: [
+      { src:"true-story-1.jpg", cap:"Sweet… But Suspicious" },
+      { src:"true-story-2.jpg", cap:"Brown Doesn't Lie" },
+      { src:"true-story-3.jpg", cap:"No Crash. No Drama." },
+      { src:"true-story-4.jpg", cap:"Upgrade Your Meetha" },
+    ]
+  },
+  {
+    id: "white-fresco",
+    type: "carousel",
+    ratio: "story",
+    num: "02",
+    title: "The White Fresco",
+    sub: "NYE Countdown Campaign — 4-slide series",
+    cats: ["series","hospitality","event"],
+    slides: [
+      { src:"white-fresco-passes.jpg", cap:"Book Your Passes Now" },
+      { src:"white-fresco-4days.jpg", cap:"4 Days To Go" },
+      { src:"white-fresco-2days.jpg", cap:"2 Days To Go" },
+      { src:"white-fresco-1day.jpg", cap:"1 Day To Go" },
+    ]
+  },
+  {
+    id: "skin-inspired",
+    type: "carousel",
+    ratio: "portrait",
+    num: "03",
+    title: "SkinInspired",
+    sub: "Product Campaign — 2-slide series",
+    cats: ["series","product","brand"],
+    slides: [
+      { src:"sunscreen-spf50.jpg", cap:"SPF 50 PA++++ Sunscreen" },
+      { src:"gentle-cleansing-banner.jpg", cap:"Gentle Cleansing for Every Skin" },
+    ]
+  },
+  // ── INDIVIDUAL ──
+  { id:"gulori", type:"image", ratio:"square", num:"04", title:"Gulori — Shiromani Hair Oil", sub:"Ayurvedic therapeutic hair oil campaign", cats:["product","brand"], src:"gulori-summer.jpg" },
+  { id:"bogo", type:"image", ratio:"portrait", num:"05", title:"BOGO Drink Delight — Lords Inn", sub:"Distil Bar & Lounge, Udaipur", cats:["hospitality","brand"], src:"bogo-lords-inn.jpg" },
+  { id:"holi-ntd", type:"image", ratio:"portrait", num:"06", title:"Holi in Nathdwara", sub:"The Marutinandan Grand — event promo", cats:["event","hospitality"], src:"holi-nathdwara.jpg" },
+  { id:"womens", type:"image", ratio:"portrait", num:"07", title:"Women's Day Special — Lords Inn", sub:"Celebrate the Queen in You", cats:["hospitality","event"], src:"womens-day-lords.jpg" },
+  { id:"utsav", type:"image", ratio:"portrait", num:"08", title:"Make a Splash — Hotel Utsav Palace", sub:"Summer pool event campaign", cats:["hospitality","event"], src:"hotel-utsav-summer.jpg" },
+  { id:"pets", type:"image", ratio:"portrait", num:"09", title:"Big Offer — Udaipur Pet Store", sub:"Dog food product promotion", cats:["brand","product"], src:"udaipur-pet-store.jpg" },
+  { id:"seedling", type:"image", ratio:"square", num:"10", title:"Shaping Future — Seedling Schools", sub:"Educational brand creative", cats:["brand"], src:"seedling-schools.jpg" },
+  { id:"popeyes", type:"image", ratio:"portrait", num:"11", title:"Grand Opening — Popeye's Supplements", sub:"Second showroom launch event", cats:["brand","event"], src:"popeyes-grand-opening.jpg" },
+  { id:"holiwood", type:"image", ratio:"square", num:"12", title:"Holi-Wood 2022 — Open Air", sub:"Bamboo Saa Resort event poster", cats:["event"], src:"holi-wood-event.jpg" },
+  { id:"tattoo", type:"image", ratio:"portrait", num:"13", title:"Diwali Offer — David Tattoo Studio", sub:"50% off all tattoos promotion", cats:["brand","event"], src:"david-tattoo-diwali.jpg" },
+  { id:"arawali", type:"image", ratio:"portrait", num:"14", title:"Arawali Milk — Healthy Solutions", sub:"Pure & fresh milk delivery brand", cats:["product","brand"], src:"arawali-milk.jpg" },
+  { id:"udaipur-day", type:"image", ratio:"portrait", num:"15", title:"Udaipur Sthapna Diwas", sub:"City founding day celebration", cats:["brand"], src:"udaipur-sthapna-diwas.jpg" },
+  { id:"corona", type:"image", ratio:"portrait", num:"16", title:"Corona Calls — Beer, We Mean", sub:"Bar & lounge product creative", cats:["hospitality","brand"], src:"corona-calls.jpg" },
+  { id:"sm15", type:"image", ratio:"square", num:"17", title:"Creative Campaign — 17", sub:"Social media brand design", cats:["brand"], src:"social-media-15.jpg" },
+  { id:"sm16", type:"image", ratio:"portrait", num:"18", title:"Creative Campaign — 18", sub:"Social media brand design", cats:["brand"], src:"social-media-16.jpg" },
+];
+
+const catLabels = { series:"Series", hospitality:"Hospitality", product:"Product", event:"Event", brand:"Brand" };
+
+// Build lightbox flat sequence (carousels expand all slides)
+groups.forEach((g, gi) => {
+  if (g.type === "carousel") {
+    g.slides.forEach((s, si) => {
+      lbSequence.push({ src: s.src, title: g.title, sub: s.cap, num: g.num, groupIdx: gi, slideIdx: si });
+    });
+  } else {
+    lbSequence.push({ src: g.src, title: g.title, sub: g.sub, num: g.num, groupIdx: gi, slideIdx: 0 });
+  }
+});
+
+// Carousel state
+const carState = {};
+
+function buildCard(g, gi, delay) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.cats = g.cats.join(' ');
+  card.dataset.gi = gi;
+  card.style.transitionDelay = delay + 's';
+
+  const tagsHtml = g.cats.map(c => `<span class="tag">${catLabels[c]||c}</span>`).join('');
+
+  if (g.type === "carousel") {
+    carState[gi] = 0;
+    const ratioClass = g.ratio === "story" ? "story-ratio" : "";
+    const slidesHtml = g.slides.map(s =>
+      `<div class="carousel-slide"><img src="${s.src}" alt="${s.cap}" loading="lazy" onerror="this.outerHTML='&lt;div class=\\'img-missing\\'&gt;&lt;div class=ttl&gt;⚠ MISSING&lt;/div&gt;&lt;code&gt;'+this.src.split('/').pop()+'&lt;/code&gt;&lt;div class=hint&gt;Upload to /work/social-media/ (lowercase, exact name)&lt;/div&gt;&lt;/div&gt;'"/></div>`
+    ).join('');
+    const dotsHtml = g.slides.map((_, i) =>
+      `<span class="car-dot${i===0?' active':''}" data-gi="${gi}" data-i="${i}"></span>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="carousel-wrap ${ratioClass}" id="cw-${gi}">
+        <div class="carousel-slides" id="cs-${gi}">${slidesHtml}</div>
+        <div class="car-counter" id="cc-${gi}">1 / ${g.slides.length}</div>
+        <div class="carousel-badge">⊞ ${g.slides.length} SLIDES</div>
+        ${g.slides.length > 1 ? `<button class="car-btn car-prev" data-gi="${gi}">‹</button><button class="car-btn car-next" data-gi="${gi}">›</button>` : ''}
+        <div class="car-dots">${dotsHtml}</div>
+        <div class="zoom-overlay" data-gi="${gi}"></div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">■ ${g.num}</div>
+        <div class="card-title">${g.title}</div>
+        <div class="card-sub">${g.sub}</div>
+        <div class="card-tags">${tagsHtml}</div>
+      </div>`;
+  } else {
+    card.innerHTML = `
+      <div class="card-thumb ${g.ratio}">
+        <img src="${g.src}" alt="${g.title}" loading="lazy" onerror="this.outerHTML='&lt;div class=\\'img-missing ${g.ratio}\\'&gt;&lt;div class=ttl&gt;⚠ MISSING&lt;/div&gt;&lt;code&gt;${g.src}&lt;/code&gt;&lt;div class=hint&gt;Upload to /work/social-media/ (lowercase, exact name)&lt;/div&gt;&lt;/div&gt;'"/>
+        <div class="type-badge">IMG</div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">■ ${g.num}</div>
+        <div class="card-title">${g.title}</div>
+        <div class="card-sub">${g.sub}</div>
+        <div class="card-tags">${tagsHtml}</div>
+      </div>`;
+    card.querySelector('.card-thumb').addEventListener('click', () => openLbForGroup(gi));
+  }
+
+  return card;
+}
+
+// Build grid
+const grid = document.getElementById('galleryGrid');
+groups.forEach((g, gi) => {
+  const card = buildCard(g, gi, gi * 0.04);
+  grid.appendChild(card);
+});
+
+// Carousel nav
+document.addEventListener('click', e => {
+  // Prev button
+  const prevBtn = e.target.closest('.car-prev');
+  const nextBtn = e.target.closest('.car-next');
+  const dot = e.target.closest('.car-dot');
+  const zoom = e.target.closest('.zoom-overlay');
+
+  if (prevBtn) { e.stopPropagation(); moveCarousel(+prevBtn.dataset.gi, -1); }
+  else if (nextBtn) { e.stopPropagation(); moveCarousel(+nextBtn.dataset.gi, 1); }
+  else if (dot) { e.stopPropagation(); setCarousel(+dot.dataset.gi, +dot.dataset.i); }
+  else if (zoom) { openLbForGroup(+zoom.dataset.gi); }
+});
+
+function moveCarousel(gi, dir) {
+  const g = groups[gi];
+  const next = (carState[gi] + dir + g.slides.length) % g.slides.length;
+  setCarousel(gi, next);
+}
+
+function setCarousel(gi, idx) {
+  const g = groups[gi];
+  carState[gi] = idx;
+  const track = document.getElementById(`cs-${gi}`);
+  if (track) track.style.transform = `translateX(-${idx * 100}%)`;
+  const counter = document.getElementById(`cc-${gi}`);
+  if (counter) counter.textContent = `${idx + 1} / ${g.slides.length}`;
+  document.querySelectorAll(`.car-dot[data-gi="${gi}"]`).forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+
+// Lightbox
+let lbIdx = 0;
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbNum = document.getElementById('lbNum');
+const lbTitle = document.getElementById('lbTitle');
+const lbSub = document.getElementById('lbSub');
+const lbCounter = document.getElementById('lbCounter');
+let filteredLb = [...Array(lbSequence.length).keys()];
+
+function openLbForGroup(gi) {
+  // Find first lbSequence entry for this group, within filtered
+  const firstIdx = filteredLb.find(i => lbSequence[i].groupIdx === gi);
+  if (firstIdx !== undefined) openLb(filteredLb.indexOf(firstIdx));
+  else openLb(0);
+}
+
+function openLb(pos) {
+  lbIdx = pos;
+  updateLb();
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLb() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function updateLb() {
+  const item = lbSequence[filteredLb[lbIdx]];
+  lbImg.src = item.src;
+  lbImg.alt = item.title;
+  lbNum.textContent = '■ ' + item.num;
+  lbTitle.textContent = item.title;
+  lbSub.textContent = item.sub || '';
+  lbCounter.textContent = (lbIdx + 1) + ' / ' + filteredLb.length;
+}
+
+document.getElementById('lbClose').addEventListener('click', closeLb);
+document.getElementById('lbPrev').addEventListener('click', () => { lbIdx = (lbIdx - 1 + filteredLb.length) % filteredLb.length; updateLb(); });
+document.getElementById('lbNext').addEventListener('click', () => { lbIdx = (lbIdx + 1) % filteredLb.length; updateLb(); });
+lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLb();
+  if (e.key === 'ArrowLeft') { lbIdx = (lbIdx - 1 + filteredLb.length) % filteredLb.length; updateLb(); }
+  if (e.key === 'ArrowRight') { lbIdx = (lbIdx + 1) % filteredLb.length; updateLb(); }
+});
+
+// Filter
+let activeFilter = 'all';
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    let shown = 0;
+    document.querySelectorAll('.card').forEach((card) => {
+      const cats = card.dataset.cats.split(' ');
+      const show = activeFilter === 'all' || cats.includes(activeFilter);
+      card.classList.toggle('hidden', !show);
+      if (show) shown++;
+    });
+    // Rebuild filteredLb for lightbox navigation
+    filteredLb = [];
+    lbSequence.forEach((item, i) => {
+      const g = groups[item.groupIdx];
+      const cats = g.cats;
+      if (activeFilter === 'all' || cats.includes(activeFilter)) filteredLb.push(i);
+    });
+    const label = activeFilter === 'all' ? `SHOWING ALL — ${shown} GROUPS / 21 PIECES` : `FILTERED: ${activeFilter.toUpperCase()} — ${shown} CARDS`;
+    document.getElementById('countLabel').textContent = label;
+  });
+});
+
+// Intersection observer
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.card').forEach(c => io.observe(c));
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>File Check — Pixel Over People</title>
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;background:#FFF4D6;color:#1A1410;padding:20px;line-height:1.5;max-width:900px;margin:0 auto}
+  h1{font-size:28px;margin-bottom:8px}
+  h2{margin-top:32px;padding:10px 14px;background:#1A1410;color:#FFC93C;border-radius:6px;font-size:18px}
+  .summary{padding:14px;border-radius:8px;margin:12px 0;font-weight:bold}
+  .summary.ok{background:#d4edda;color:#155724;border:2px solid #155724}
+  .summary.bad{background:#f8d7da;color:#721c24;border:2px solid #721c24}
+  .row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid #eee;font-family:monospace;font-size:13px}
+  .row .status{flex-shrink:0;width:24px;text-align:center;font-size:16px}
+  .row.ok{background:#f0fff4}
+  .row.fail{background:#fff5f5;color:#c00;font-weight:bold}
+  .row.checking{color:#888}
+  .row .name{flex:1;word-break:break-all}
+  .note{font-size:12px;color:#555;margin:8px 0;padding:10px;background:#fff;border-left:4px solid #ED1E79;border-radius:4px}
+  code{background:#fff;padding:2px 6px;border-radius:3px;font-size:12px}
+  .legend{font-size:13px;margin:8px 0;color:#555}
+</style>
+</head>
+<body>
+
+<h1>🔍 Folder Check</h1>
+<p>This page tests every file your category pages expect. <strong>Red rows = missing files</strong> — upload them to the matching folder with that exact lowercase filename.</p>
+<div class="legend">✅ found · ❌ missing (404) · ⏳ checking</div>
+
+<div class="note"><strong>How GitHub Pages serves your site:</strong> filenames are <strong>case-sensitive</strong>. <code>Sketch_Slide_1.jpg</code> ≠ <code>sketch_slide_1.jpg</code>. If a file shows ❌ but you uploaded it, the upload name has different case or extension.</div>
+
+<h2>📂 storyboard/  (10 images)</h2>
+<div class="summary" id="sum-sb">Checking…</div>
+<div id="list-sb"></div>
+
+<h2>📂 2d-animation/  (4 videos)</h2>
+<div class="summary" id="sum-2d">Checking…</div>
+<div id="list-2d"></div>
+
+<h2>📂 social-media/  (need this many files — see list)</h2>
+<div class="summary" id="sum-sm">Checking…</div>
+<div id="list-sm"></div>
+
+<script>
+const expected = {
+  'storyboard': [
+    'sketch_slide_1.jpg','sketch_slide_2.jpg','sketch_slide_3.jpg','sketch_slide_4.jpg','sketch_slide_5.jpg',
+    'sketch_slide_6.jpg','sketch_slide_7.jpg','sketch_slide_8.jpg','sketch_slide_9.jpg','sketch_slide_10.jpg'
+  ],
+  '2d-animation': [
+    'the-magic-of-kindness.mp4','main.mp4','img-9964.mp4','img-0933.mp4'
+  ],
+  'social-media': [
+    'true-story-1.jpg','true-story-2.jpg','true-story-3.jpg','true-story-4.jpg',
+    'white-fresco-passes.jpg','white-fresco-4days.jpg','white-fresco-2days.jpg','white-fresco-1day.jpg',
+    'sunscreen-spf50.jpg','gentle-cleansing-banner.jpg',
+    'gulori-summer.jpg','bogo-lords-inn.jpg','holi-nathdwara.jpg','womens-day-lords.jpg',
+    'hotel-utsav-summer.jpg','udaipur-pet-store.jpg','seedling-schools.jpg','popeyes-grand-opening.jpg',
+    'holi-wood-event.jpg','david-tattoo-diwali.jpg','arawali-milk.jpg','udaipur-sthapna-diwas.jpg',
+    'corona-calls.jpg','social-media-15.jpg','social-media-16.jpg'
+  ]
+};
+
+const sumIds = { 'storyboard':'sum-sb', '2d-animation':'sum-2d', 'social-media':'sum-sm' };
+const listIds = { 'storyboard':'list-sb', '2d-animation':'list-2d', 'social-media':'list-sm' };
+
+async function checkFile(folder, file){
+  try {
+    const resp = await fetch(`${folder}/${file}`, { method:'HEAD', cache:'no-store' });
+    return resp.ok;
+  } catch(e) { return false; }
+}
+
+async function checkFolder(folder){
+  const list = document.getElementById(listIds[folder]);
+  const sum  = document.getElementById(sumIds[folder]);
+  const files = expected[folder];
+  let okCount = 0, failCount = 0;
+
+  // create rows
+  files.forEach(f => {
+    const row = document.createElement('div');
+    row.className = 'row checking';
+    row.id = `row-${folder}-${f}`;
+    row.innerHTML = `<span class="status">⏳</span><span class="name">${folder}/${f}</span>`;
+    list.appendChild(row);
+  });
+
+  // check each
+  for (const f of files){
+    const ok = await checkFile(folder, f);
+    const row = document.getElementById(`row-${folder}-${f}`);
+    if (ok){
+      row.className = 'row ok';
+      row.querySelector('.status').textContent = '✅';
+      okCount++;
+    } else {
+      row.className = 'row fail';
+      row.querySelector('.status').textContent = '❌';
+      failCount++;
+    }
+  }
+
+  if (failCount === 0){
+    sum.className = 'summary ok';
+    sum.textContent = `✅ All ${okCount} files found — folder is healthy!`;
+  } else {
+    sum.className = 'summary bad';
+    sum.textContent = `❌ ${failCount} missing out of ${files.length}. Upload the red files (exact lowercase names) into the /work/${folder}/ folder on GitHub.`;
+  }
+}
+
+(async ()=>{
+  await checkFolder('storyboard');
+  await checkFolder('2d-animation');
+  await checkFolder('social-media');
+})();
+</script>
+
+</body>
+</html>
