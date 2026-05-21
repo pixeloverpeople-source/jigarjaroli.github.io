@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Arpit & Surbhi — Wedding Invitation Suite — Pixel Over People</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=VT323&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{ --pink:#ED1E79; --yellow:#FFC93C; --cream:#FFF4D6; --ink:#1A1410; --rose:#B8455E; }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Space Mono',monospace;background:var(--cream);color:var(--ink);overflow-x:hidden;min-height:100vh}
+  ::selection{background:var(--pink);color:var(--cream)}
+
+  .marquee-bar{background:var(--ink);color:var(--cream);padding:10px 0;overflow:hidden;white-space:nowrap;font-family:'VT323',monospace;font-size:20px;letter-spacing:.15em;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--pink)}
+  .marquee-bar span{display:inline-block;animation:scroll 40s linear infinite;padding-right:60px}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .breadcrumb{background:var(--cream);padding:14px 5vw;border-bottom:2px dashed var(--ink);font-family:'VT323',monospace;font-size:16px;letter-spacing:.1em}
+  .breadcrumb a{color:var(--ink);text-decoration:none;border-bottom:2px solid transparent;transition:all .2s}
+  .breadcrumb a:hover{color:var(--pink);border-color:var(--pink)}
+  .breadcrumb .sep{margin:0 10px;color:var(--rose);opacity:.5}
+  .breadcrumb .current{color:var(--pink);font-weight:bold}
+
+  .hero{background:linear-gradient(180deg, var(--cream) 0%, #fff 100%);padding:50px 5vw 40px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--rose) 1px,transparent 1px);background-size:36px 36px;opacity:.08;pointer-events:none}
+  .hero-inner{position:relative;z-index:2;max-width:900px;margin:0 auto}
+  .hero-tag{display:inline-block;background:var(--pink);color:var(--cream);padding:6px 16px;font-family:'VT323',monospace;font-size:20px;letter-spacing:.15em;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--yellow);transform:rotate(-1.5deg);margin-bottom:24px}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;font-size:clamp(54px,11vw,140px);line-height:.95;letter-spacing:-.02em;color:var(--rose);margin-bottom:8px}
+  .hero-title .amp{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;color:var(--pink);font-size:.7em;vertical-align:middle;margin:0 .1em}
+  .hero-date{font-family:'Bowlby One',sans-serif;font-size:clamp(16px,3vw,22px);color:var(--ink);letter-spacing:.05em;margin-top:14px}
+  .hero-venue{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(15px,2vw,19px);color:#666;margin-top:6px}
+  .hero-divider{display:flex;align-items:center;justify-content:center;gap:14px;margin:24px 0 8px;color:var(--rose)}
+  .hero-divider::before,.hero-divider::after{content:"";flex:0 0 40px;height:2px;background:var(--rose);opacity:.5}
+  .hero-divider .dot{width:8px;height:8px;background:var(--pink);border-radius:50%}
+  .hero-desc{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.05em;color:#777;max-width:560px;margin:18px auto 0;line-height:1.7}
+  .hero-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
+  .hero-tag-pill{background:var(--ink);color:var(--yellow);font-family:'VT323',monospace;font-size:13px;letter-spacing:.1em;padding:4px 12px;border:2px solid var(--ink)}
+
+  .gallery-section{max-width:1200px;margin:0 auto;padding:50px 5vw}
+  .section-label{font-family:'VT323',monospace;font-size:16px;letter-spacing:.2em;color:var(--rose);text-align:center;margin-bottom:6px}
+  .section-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(28px,5vw,42px);color:var(--ink);text-align:center;margin-bottom:32px}
+
+  .featured-grid{display:grid;grid-template-columns:1fr;gap:30px;margin-bottom:50px}
+  @media(min-width:900px){.featured-grid{grid-template-columns:1fr 1.4fr}}
+
+  .featured-card,.gallery-card{background:#fff;border:3px solid var(--ink);box-shadow:8px 8px 0 var(--ink);overflow:hidden;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;opacity:0;transform:translateY(28px);cursor:pointer}
+  .featured-card.visible,.gallery-card.visible{opacity:1;transform:translateY(0);transition:opacity .5s ease,transform .5s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
+  .featured-card:hover,.gallery-card:hover{transform:translateY(-5px);box-shadow:12px 12px 0 var(--pink)}
+
+  .card-img-wrap{position:relative;overflow:hidden;background:#fff}
+  .featured-card .card-img-wrap{aspect-ratio:1}
+  .featured-card.wide .card-img-wrap{aspect-ratio:3/2}
+  .gallery-card .card-img-wrap{aspect-ratio:3/2}
+  .card-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+  .featured-card:hover .card-img-wrap img,.gallery-card:hover .card-img-wrap img{transform:scale(1.03)}
+  .img-badge{position:absolute;top:12px;left:12px;background:var(--ink);color:var(--yellow);font-family:'VT323',monospace;font-size:12px;letter-spacing:.12em;padding:3px 9px;border:2px solid var(--yellow);z-index:2}
+  .zoom-badge{position:absolute;bottom:12px;right:12px;background:var(--pink);color:var(--cream);font-family:'VT323',monospace;font-size:12px;letter-spacing:.12em;padding:3px 9px;border:2px solid var(--cream);z-index:2;opacity:0;transition:opacity .25s}
+  .featured-card:hover .zoom-badge,.gallery-card:hover .zoom-badge{opacity:1}
+
+  .img-missing{width:100%;height:100%;background:repeating-linear-gradient(45deg,#fff,#fff 12px,#fef0f6 12px,#fef0f6 24px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;gap:8px;font-family:'VT323',monospace;color:#a55}
+  .img-missing .icon{font-size:42px;opacity:.6}
+  .img-missing .ttl{font-size:14px;letter-spacing:.12em;color:#a55}
+  .img-missing code{background:var(--pink);color:var(--cream);padding:3px 8px;font-size:11px;border:2px solid var(--ink);word-break:break-all;max-width:90%}
+  .img-missing .hint{font-size:11px;color:#c88;max-width:240px;line-height:1.4}
+
+  .card-caption{padding:16px 18px;background:#fff;border-top:2px solid var(--ink)}
+  .card-caption .label{font-family:'VT323',monospace;font-size:13px;letter-spacing:.12em;color:var(--pink);margin-bottom:3px}
+  .card-caption .title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:18px;color:var(--ink)}
+
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px}
+
+  .sub-collection{margin:50px 0 30px;display:block;text-decoration:none;color:inherit}
+  .sub-collection-card{background:var(--ink);border:3px solid var(--ink);box-shadow:10px 10px 0 var(--pink);overflow:hidden;display:grid;grid-template-columns:1fr;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;cursor:pointer}
+  @media(min-width:800px){.sub-collection-card{grid-template-columns:1.2fr 1fr}}
+  .sub-collection-card:hover{transform:translateY(-5px);box-shadow:14px 14px 0 var(--yellow)}
+  .sub-thumb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;aspect-ratio:5/3;background:var(--ink)}
+  .sub-thumb-grid > div{position:relative;overflow:hidden;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+  .sub-thumb-grid > div:nth-child(1){grid-column:span 2;grid-row:span 2}
+  .sub-thumb-grid > div:nth-child(4),.sub-thumb-grid > div:nth-child(5){grid-row:span 1}
+  .sub-thumb-grid img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+  .sub-collection-card:hover .sub-thumb-grid img{transform:scale(1.06)}
+  .sub-thumb-grid .img-missing{font-size:10px;padding:8px}
+  .sub-thumb-grid .img-missing .icon{font-size:24px}
+  .sub-thumb-grid .img-missing .ttl,.sub-thumb-grid .img-missing code,.sub-thumb-grid .img-missing .hint{display:none}
+  .sub-content{padding:36px 32px;background:var(--ink);color:var(--cream);display:flex;flex-direction:column;justify-content:center}
+  .sub-label{font-family:'VT323',monospace;font-size:15px;letter-spacing:.2em;color:var(--yellow);margin-bottom:10px}
+  .sub-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(32px,5vw,46px);color:var(--cream);line-height:1;margin-bottom:14px}
+  .sub-title .accent{color:var(--yellow)}
+  .sub-desc{font-family:'Instrument Serif',serif;font-style:italic;font-size:15px;color:var(--cream);opacity:.85;line-height:1.5;margin-bottom:18px;max-width:420px}
+  .sub-cta{display:inline-flex;align-items:center;gap:10px;background:var(--pink);color:var(--cream);font-family:'VT323',monospace;font-size:16px;letter-spacing:.15em;padding:10px 18px;border:3px solid var(--cream);width:fit-content;transition:all .2s}
+  .sub-collection-card:hover .sub-cta{background:var(--yellow);color:var(--ink);border-color:var(--yellow)}
+  .sub-count{font-family:'VT323',monospace;font-size:13px;letter-spacing:.15em;color:var(--yellow);margin-top:10px;opacity:.7}
+
+  .ceremonies-strip{background:var(--ink);color:var(--cream);padding:50px 5vw;margin:50px -5vw;text-align:center}
+  .ceremonies-strip .strip-label{font-family:'VT323',monospace;font-size:18px;letter-spacing:.2em;color:var(--yellow);margin-bottom:10px}
+  .ceremonies-strip .strip-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(28px,5vw,44px);margin-bottom:24px;color:var(--cream)}
+  .ceremonies-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:16px;max-width:1000px;margin:0 auto}
+  .ceremony-chip{background:transparent;border:2px solid var(--yellow);padding:12px 14px;text-align:center}
+  .ceremony-chip .name{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:18px;color:var(--yellow);margin-bottom:2px}
+  .ceremony-chip .when{font-family:'VT323',monospace;font-size:12px;letter-spacing:.1em;color:var(--cream);opacity:.8}
+
+  .lb-overlay{position:fixed;inset:0;z-index:1000;background:rgba(26,20,16,.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px}
+  .lb-overlay.open{opacity:1;pointer-events:all}
+  .lb-box{position:relative;max-width:1100px;width:100%;transform:scale(.93);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+  .lb-overlay.open .lb-box{transform:scale(1)}
+  .lb-media-wrap{position:relative;width:100%;border:4px solid var(--cream);box-shadow:12px 12px 0 var(--pink);background:#fff;overflow:hidden}
+  .lb-media-wrap img{width:100%;display:block;max-height:78vh;object-fit:contain;background:#fff}
+  .lb-close{position:absolute;top:-18px;right:-18px;width:42px;height:42px;background:var(--pink);border:3px solid var(--ink);color:var(--cream);font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
+  .lb-close:hover{background:var(--yellow);color:var(--ink)}
+  .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;background:var(--pink);border:3px solid var(--cream);color:var(--cream);font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
+  .lb-prev{left:-20px}.lb-next{right:-20px}
+  .lb-nav:hover{background:var(--yellow);color:var(--ink)}
+  .lb-info{margin-top:14px;color:var(--cream);text-align:center}
+  .lb-label{font-family:'VT323',monospace;font-size:14px;letter-spacing:.12em;color:var(--yellow)}
+  .lb-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:22px;color:var(--cream)}
+  .lb-counter{font-family:'VT323',monospace;font-size:13px;color:var(--cream);opacity:.7;margin-top:6px}
+
+  footer{background:var(--ink);color:var(--cream);border-top:4px solid var(--pink);padding:28px 5vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;font-family:'VT323',monospace;font-size:16px;letter-spacing:.1em;margin-top:0}
+  footer a{color:var(--yellow);text-decoration:none}
+  footer a:hover{color:var(--pink)}
+
+  @media(max-width:600px){.lb-prev{left:5px}.lb-next{right:5px}.lb-close{top:-10px;right:5px}}
+</style>
+</head>
+<body>
+
+<div class="marquee-bar">
+  <span>💌 ARPIT & SURBHI ✦ #ShaadiWaliHoli ✦ 3-4 MARCH 2026 ✦ HOTEL UTSAV PALACE ✦ FATEHNAGAR ✦ DESIGNED BY PIXEL OVER PEOPLE ✦ 💌 ARPIT & SURBHI ✦ #ShaadiWaliHoli ✦ JIGAR JAROLI ✦ UDAIPUR ✦ </span>
+</div>
+
+<nav class="breadcrumb">
+  <a href="../../../index.html">PORTFOLIO</a>
+  <span class="sep">/</span>
+  <a href="../index.html">WEDDING INVITATIONS</a>
+  <span class="sep">/</span>
+  <span class="current">ARPIT & SURBHI</span>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">DESTINATION WEDDING</div>
+    <h1 class="hero-title">Arpit<span class="amp">&</span>Surbhi</h1>
+    <div class="hero-divider"><span class="dot"></span></div>
+    <div class="hero-date">3—4 MARCH 2026</div>
+    <div class="hero-venue">Hotel Utsav Palace, Fatehnagar</div>
+    <p class="hero-desc">A full Rajasthani-themed destination wedding suite: monogram crest, main invitation, trifold itinerary card & individual ceremony cards — designed in the Pixel Over People watercolour-illustration language with a #ShaadiWaliHoli through-line.</p>
+    <div class="hero-tags">
+      <span class="hero-tag-pill">DESTINATION</span>
+      <span class="hero-tag-pill">RAJASTHANI</span>
+      <span class="hero-tag-pill">WATERCOLOR</span>
+      <span class="hero-tag-pill">TRIFOLD</span>
+      <span class="hero-tag-pill">CEREMONY CARDS</span>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section">
+  <div class="section-label">— THE SUITE —</div>
+  <h2 class="section-title">The Hero Pieces</h2>
+
+  <div class="featured-grid">
+    <div class="featured-card" data-idx="0">
+      <div class="card-img-wrap">
+        <div class="img-badge">01</div>
+        <img src="monogram.jpg" alt="Arpit & Surbhi Monogram" loading="lazy"
+          onerror="this.outerHTML='&lt;div class=img-missing&gt;&lt;div class=icon&gt;💌&lt;/div&gt;&lt;div class=ttl&gt;MONOGRAM MISSING&lt;/div&gt;&lt;code&gt;monogram.jpg&lt;/code&gt;&lt;div class=hint&gt;Upload to /work/wedding/arpit-surbhi/&lt;/div&gt;&lt;/div&gt;'"/>
+        <div class="zoom-badge">VIEW LARGE ↗</div>
+      </div>
+      <div class="card-caption">
+        <div class="label">■ 01 / MONOGRAM CREST</div>
+        <div class="title">Royal SA Crest with Elephants</div>
+      </div>
+    </div>
+
+    <div class="featured-card wide" data-idx="1">
+      <div class="card-img-wrap">
+        <div class="img-badge">02</div>
+        <img src="main-invitation.jpg" alt="Arpit & Surbhi Main Invitation" loading="lazy"
+          onerror="this.outerHTML='&lt;div class=img-missing&gt;&lt;div class=icon&gt;💌&lt;/div&gt;&lt;div class=ttl&gt;IMAGE MISSING&lt;/div&gt;&lt;code&gt;main-invitation.jpg&lt;/code&gt;&lt;div class=hint&gt;Upload to /work/wedding/arpit-surbhi/&lt;/div&gt;&lt;/div&gt;'"/>
+        <div class="zoom-badge">VIEW LARGE ↗</div>
+      </div>
+      <div class="card-caption">
+        <div class="label">■ 02 / MAIN INVITATION + RSVP</div>
+        <div class="title">The Couple, The Palace & The Stamped Envelope</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">— THE COLLATERAL —</div>
+  <h2 class="section-title">The Ceremony Cards & Trifold</h2>
+
+  <div class="gallery-grid">
+    <div class="gallery-card" data-idx="2">
+      <div class="card-img-wrap">
+        <div class="img-badge">03</div>
+        <img src="ceremony-cards-1.jpg" alt="Ceremony Cards Set 1" loading="lazy"
+          onerror="this.outerHTML='&lt;div class=img-missing&gt;&lt;div class=icon&gt;💌&lt;/div&gt;&lt;div class=ttl&gt;IMAGE MISSING&lt;/div&gt;&lt;code&gt;ceremony-cards-1.jpg&lt;/code&gt;&lt;div class=hint&gt;Upload to /work/wedding/arpit-surbhi/&lt;/div&gt;&lt;/div&gt;'"/>
+        <div class="zoom-badge">VIEW LARGE ↗</div>
+      </div>
+      <div class="card-caption">
+        <div class="label">■ 03 / CEREMONY CARDS — SET 1</div>
+        <div class="title">Dastur · Toran · Var Nikasi · Phere · Reception</div>
+      </div>
+    </div>
+
+    <div class="gallery-card" data-idx="3">
+      <div class="card-img-wrap">
+        <div class="img-badge">04</div>
+        <img src="ceremony-cards-2.jpg" alt="Ceremony Cards Set 2" loading="lazy"
+          onerror="this.outerHTML='&lt;div class=img-missing&gt;&lt;div class=icon&gt;💌&lt;/div&gt;&lt;div class=ttl&gt;IMAGE MISSING&lt;/div&gt;&lt;code&gt;ceremony-cards-2.jpg&lt;/code&gt;&lt;div class=hint&gt;Upload to /work/wedding/arpit-surbhi/&lt;/div&gt;&lt;/div&gt;'"/>
+        <div class="zoom-badge">VIEW LARGE ↗</div>
+      </div>
+      <div class="card-caption">
+        <div class="label">■ 04 / CEREMONY CARDS — SET 2</div>
+        <div class="title">Vinayak Sthapana · Kalash · Haldi · Sangeet · Pool · Mayra</div>
+      </div>
+    </div>
+
+    <div class="gallery-card" data-idx="4">
+      <div class="card-img-wrap">
+        <div class="img-badge">05</div>
+        <img src="trifold-1.jpg" alt="Trifold — Open View" loading="lazy"
+          onerror="this.outerHTML='&lt;div class=img-missing&gt;&lt;div class=icon&gt;💌&lt;/div&gt;&lt;div class=ttl&gt;IMAGE MISSING&lt;/div&gt;&lt;code&gt;trifold-1.jpg&lt;/code&gt;&lt;div class=hint&gt;Upload to /work/wedding/arpit-surbhi/&lt;/div&gt;&lt;/div&gt;'"/>
+        <div class="zoom-badge">VIEW LARGE ↗</div>
+      </div>
+      <div class="card-caption">
+        <div class="label">■ 05 / TRIFOLD ITINERARY</div>
+        <div class="title">Open View — Cover, Welcome Note & Timeline</div>
+      </div>
+    </div>
+
+    <div class="gallery-card" data-idx="5">
+      <div class="card-img-wrap">
+        <div class="img-badge">06</div>
+        <img src="trifold-2.jpg" alt="Trifold — Detail" loading="lazy"
+          onerror="this.outerHTML='&lt;div class=img-missing&gt;&lt;div class=icon&gt;💌&lt;/div&gt;&lt;div class=ttl&gt;IMAGE MISSING&lt;/div&gt;&lt;code&gt;trifold-2.jpg&lt;/code&gt;&lt;div class=hint&gt;Upload to /work/wedding/arpit-surbhi/&lt;/div&gt;&lt;/div&gt;'"/>
+        <div class="zoom-badge">VIEW LARGE ↗</div>
+      </div>
+      <div class="card-caption">
+        <div class="label">■ 06 / TRIFOLD — TIMELINE</div>
+        <div class="title">Folded View with Full Wedding Timeline Detail</div>
+      </div>
+    </div>
+  </div>
+
+  <a class="sub-collection" href="./sun-boards/">
+    <div class="sub-collection-card">
+      <div class="sub-thumb-grid">
+        <div>
+          <img src="sun-boards/haldi-carnival.jpg" alt="Haldi Carnival board" loading="lazy"
+            onerror="this.outerHTML='&lt;div class=img-missing&gt;&lt;div class=icon&gt;🎪&lt;/div&gt;&lt;/div&gt;'"/>
+        </div>
+        <div>
+          <img src="sun-boards/sangeet.jpg" alt="Sangeet board" loading="lazy"
+            onerror="this.outerHTML='&lt;div class=img-missing&gt;&lt;div class=icon&gt;🎪&lt;/div&gt;&lt;/div&gt;'"/>
+        </div>
+        <div>
+          <img src="sun-boards/pool-party.jpg" alt="Pool Party board" loading="lazy"
+            onerror="this.outerHTML='&lt;div class=img-missing&gt;&lt;div class=icon&gt;🎪&lt;/div&gt;&lt;/div&gt;'"/>
+        </div>
+        <div>
+          <img src="sun-boards/mayra.jpg" alt="Mayra board" loading="lazy"
+            onerror="this.outerHTML='&lt;div class=img-missing&gt;&lt;div class=icon&gt;🎪&lt;/div&gt;&lt;/div&gt;'"/>
+        </div>
+        <div>
+          <img src="sun-boards/reception.jpg" alt="Reception board" loading="lazy"
+            onerror="this.outerHTML='&lt;div class=img-missing&gt;&lt;div class=icon&gt;🎪&lt;/div&gt;&lt;/div&gt;'"/>
+        </div>
+      </div>
+      <div class="sub-content">
+        <div class="sub-label">— ALSO IN THIS SUITE —</div>
+        <h3 class="sub-title">Sun Boards<br><span class="accent">in situ.</span></h3>
+        <p class="sub-desc">Five custom welcome boards — one for each major ceremony — printed on sunpack and displayed at the venue entrances across the 3-day celebration.</p>
+        <span class="sub-cta">VIEW THE BOARDS GALLERY ↗</span>
+        <div class="sub-count">■ 05 BOARDS · 03 DAYS</div>
+      </div>
+    </div>
+  </a>
+
+</section>
+
+<section class="ceremonies-strip">
+  <div class="strip-label">— FULL ITINERARY —</div>
+  <h3 class="strip-title">11 Ceremonies, 3 Days, One Wedding</h3>
+  <div class="ceremonies-grid">
+    <div class="ceremony-chip"><div class="name">Vinayak Sthapana</div><div class="when">3 MAR · 8:00 AM</div></div>
+    <div class="ceremony-chip"><div class="name">Kalash</div><div class="when">3 MAR · 9:00 AM</div></div>
+    <div class="ceremony-chip"><div class="name">Haldi Carnival</div><div class="when">3 MAR · 1:00 PM</div></div>
+    <div class="ceremony-chip"><div class="name">Sangeet</div><div class="when">3 MAR · 7:00 PM</div></div>
+    <div class="ceremony-chip"><div class="name">Pool Party</div><div class="when">4 MAR · 8:00 AM</div></div>
+    <div class="ceremony-chip"><div class="name">Mayra</div><div class="when">4 MAR · 10:30 AM</div></div>
+    <div class="ceremony-chip"><div class="name">Dastur</div><div class="when">4 MAR · 12:30 PM</div></div>
+    <div class="ceremony-chip"><div class="name">Var Nikasi</div><div class="when">4 MAR · 5:30 PM</div></div>
+    <div class="ceremony-chip"><div class="name">Toran</div><div class="when">4 MAR · 7:00 PM</div></div>
+    <div class="ceremony-chip"><div class="name">Reception</div><div class="when">4 MAR · 8:00 PM</div></div>
+    <div class="ceremony-chip"><div class="name">Phere</div><div class="when">5 MAR · 4:30 AM</div></div>
+  </div>
+</section>
+
+<div class="lb-overlay" id="lightbox">
+  <div class="lb-box">
+    <button class="lb-close" id="lbClose" aria-label="Close">×</button>
+    <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+    <button class="lb-nav lb-next" id="lbNext" aria-label="Next">›</button>
+    <div class="lb-media-wrap"><img id="lbImg" src="" alt=""/></div>
+    <div class="lb-info">
+      <div class="lb-label" id="lbLabel"></div>
+      <div class="lb-title" id="lbTitle"></div>
+      <div class="lb-counter" id="lbCounter"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>© JIGAR JAROLI · PIXEL OVER PEOPLE · UDAIPUR</div>
+  <div>
+    <a href="../index.html">← ALL WEDDINGS</a>
+    &nbsp;·&nbsp;
+    <a href="../../../index.html">PORTFOLIO</a>
+    &nbsp;·&nbsp;
+    <a href="mailto:pixeloverpeople@gmail.com">EMAIL ↗</a>
+  </div>
+</footer>
+
+<script>
+const items = [
+  { src:"monogram.jpg",          label:"01 / MONOGRAM CREST",          title:"Royal SA Crest with Elephants" },
+  { src:"main-invitation.jpg",   label:"02 / MAIN INVITATION + RSVP",  title:"The Couple, The Palace & The Stamped Envelope" },
+  { src:"ceremony-cards-1.jpg",  label:"03 / CEREMONY CARDS — SET 1",  title:"Dastur · Toran · Var Nikasi · Phere · Reception" },
+  { src:"ceremony-cards-2.jpg",  label:"04 / CEREMONY CARDS — SET 2",  title:"Vinayak Sthapana · Kalash · Haldi · Sangeet · Pool · Mayra" },
+  { src:"trifold-1.jpg",         label:"05 / TRIFOLD ITINERARY",       title:"Open View — Cover, Welcome Note & Timeline" },
+  { src:"trifold-2.jpg",         label:"06 / TRIFOLD — TIMELINE",      title:"Folded View with Full Wedding Timeline Detail" }
+];
+
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbLabel = document.getElementById('lbLabel');
+const lbTitle = document.getElementById('lbTitle');
+const lbCounter = document.getElementById('lbCounter');
+let lbIdx = 0;
+
+function openLb(i){ lbIdx = i; updateLb(); lb.classList.add('open'); document.body.style.overflow='hidden'; }
+function closeLb(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+function updateLb(){
+  const it = items[lbIdx];
+  lbImg.src = it.src; lbImg.alt = it.title;
+  lbLabel.textContent = '■ ' + it.label;
+  lbTitle.textContent = it.title;
+  lbCounter.textContent = `${lbIdx+1} / ${items.length}`;
+}
+function lbNext(){ lbIdx = (lbIdx+1) % items.length; updateLb(); }
+function lbPrev(){ lbIdx = (lbIdx-1+items.length) % items.length; updateLb(); }
+
+document.querySelectorAll('[data-idx]').forEach(el => {
+  el.addEventListener('click', () => openLb(parseInt(el.dataset.idx, 10)));
+});
+document.getElementById('lbClose').addEventListener('click', closeLb);
+document.getElementById('lbNext').addEventListener('click', lbNext);
+document.getElementById('lbPrev').addEventListener('click', lbPrev);
+lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLb();
+  if (e.key === 'ArrowRight') lbNext();
+  if (e.key === 'ArrowLeft') lbPrev();
+});
+
+const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.08 });
+document.querySelectorAll('.featured-card, .gallery-card').forEach(c => io.observe(c));
+</script>
+</body>
+</html>
