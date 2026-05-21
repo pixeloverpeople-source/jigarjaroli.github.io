@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Branding & Packaging — Pixel Over People</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=VT323&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{ --pink:#ED1E79; --yellow:#FFC93C; --cream:#FFF4D6; --ink:#1A1410; }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Space Mono',monospace;background:#fff;color:var(--ink);overflow-x:hidden;min-height:100vh}
+  ::selection{background:var(--ink);color:var(--yellow)}
+
+  .marquee-bar{background:var(--ink);color:var(--cream);padding:10px 0;overflow:hidden;white-space:nowrap;font-family:'VT323',monospace;font-size:20px;letter-spacing:.15em;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--pink)}
+  .marquee-bar span{display:inline-block;animation:scroll 40s linear infinite;padding-right:60px}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .hero{background:var(--ink);padding:60px 5vw 50px;position:relative;overflow:hidden;border-bottom:4px solid var(--yellow)}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--yellow) 1px,transparent 1px),linear-gradient(90deg,var(--yellow) 1px,transparent 1px);background-size:60px 60px;opacity:.05;pointer-events:none}
+  .hero-inner{position:relative;z-index:2;max-width:1300px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  .back-btn{display:inline-flex;align-items:center;gap:8px;background:var(--yellow);color:var(--ink);text-decoration:none;font-family:'VT323',monospace;font-size:18px;letter-spacing:.1em;padding:10px 20px;border:3px solid var(--yellow);box-shadow:4px 4px 0 var(--pink);transition:all .2s}
+  .back-btn:hover{background:var(--cream);box-shadow:6px 6px 0 var(--pink)}
+  .hero-tag{display:inline-block;background:var(--pink);color:var(--cream);padding:6px 16px;font-family:'VT323',monospace;font-size:22px;letter-spacing:.1em;border:3px solid var(--cream);box-shadow:4px 4px 0 var(--yellow);transform:rotate(-1.5deg);margin-bottom:16px;margin-top:20px}
+  .hero-title{font-family:'Bowlby One',sans-serif;font-size:clamp(36px,8vw,100px);line-height:.88;letter-spacing:-.04em;color:#fff;text-shadow:5px 5px 0 var(--pink)}
+  .hero-title .accent{color:var(--yellow)}
+  .hero-sub{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(15px,2vw,20px);color:var(--cream);margin-top:14px;opacity:.85;max-width:620px}
+  .hero-meta{font-family:'VT323',monospace;font-size:16px;color:var(--cream);letter-spacing:.1em;text-align:right}
+  .hero-meta strong{color:var(--yellow);font-size:28px;display:block}
+
+  .gallery-section{max-width:1400px;margin:0 auto;padding:60px 5vw}
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px}
+
+  .client-card{background:#fff;border:3px solid var(--ink);box-shadow:8px 8px 0 var(--ink);overflow:hidden;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;opacity:0;transform:translateY(28px);cursor:pointer;text-decoration:none;color:inherit;display:block}
+  .client-card.visible{opacity:1;transform:translateY(0);transition:opacity .5s ease,transform .5s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
+  .client-card:hover{transform:translateY(-5px)}
+  .client-card.eklingnath:hover{box-shadow:12px 12px 0 #B8860B}
+  .client-card.just-makhana:hover{box-shadow:12px 12px 0 #2E7D32}
+  .client-card.flavors:hover{box-shadow:12px 12px 0 #0097A7}
+  .client-card.hey-concrete:hover{box-shadow:12px 12px 0 #3E2723}
+  .client-card.yuj:hover{box-shadow:12px 12px 0 var(--ink)}
+
+  .card-thumb{position:relative;aspect-ratio:4/3;background:#f5f5f5;overflow:hidden}
+  .card-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+  .client-card:hover .card-thumb img{transform:scale(1.04)}
+
+  .num-badge{position:absolute;top:12px;left:12px;font-family:'VT323',monospace;font-size:14px;letter-spacing:.1em;padding:4px 10px;border:2px solid;z-index:2}
+  .eklingnath .num-badge{background:#B8860B;color:#fff;border-color:#fff}
+  .just-makhana .num-badge{background:#2E7D32;color:#fff;border-color:#fff}
+  .flavors .num-badge{background:#0097A7;color:#fff;border-color:#fff}
+  .hey-concrete .num-badge{background:#3E2723;color:#fff;border-color:#fff}
+  .yuj .num-badge{background:var(--ink);color:#fff;border-color:#fff}
+
+  .view-badge{position:absolute;bottom:12px;right:12px;background:var(--ink);color:var(--yellow);font-family:'VT323',monospace;font-size:13px;letter-spacing:.1em;padding:4px 10px;border:2px solid var(--yellow);z-index:2}
+
+  .placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;gap:8px;font-family:'VT323',monospace;color:#999}
+  .placeholder .icon{font-size:42px;opacity:.5}
+  .placeholder .name{font-size:15px;letter-spacing:.1em;color:#666}
+
+  .card-body{padding:18px;border-top:3px solid var(--ink)}
+  .eklingnath .card-body{background:#FFFDE7}
+  .just-makhana .card-body{background:#F1F8E9}
+  .flavors .card-body{background:#E0F7FA}
+  .hey-concrete .card-body{background:#EFEBE9}
+  .yuj .card-body{background:#FAFAFA}
+
+  .card-num{font-family:'VT323',monospace;font-size:13px;letter-spacing:.12em;margin-bottom:4px}
+  .eklingnath .card-num{color:#B8860B}
+  .just-makhana .card-num{color:#2E7D32}
+  .flavors .card-num{color:#0097A7}
+  .hey-concrete .card-num{color:#3E2723}
+  .yuj .card-num{color:var(--ink)}
+
+  .card-title{font-family:'Bowlby One',sans-serif;font-size:20px;color:var(--ink);letter-spacing:-.02em;margin-bottom:6px}
+  .card-sub{font-family:'Instrument Serif',serif;font-style:italic;font-size:14px;color:#666;margin-bottom:8px}
+  .card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .card-tag{font-family:'VT323',monospace;font-size:11px;letter-spacing:.1em;padding:3px 8px;border:2px solid var(--ink);background:var(--ink);color:#fff}
+
+  footer{background:var(--ink);color:var(--cream);border-top:4px solid var(--yellow);padding:28px 5vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;font-family:'VT323',monospace;font-size:16px;letter-spacing:.1em;margin-top:40px}
+  footer a{color:var(--yellow);text-decoration:none}
+  footer a:hover{color:var(--pink)}
+  @media(max-width:600px){.hero-meta{text-align:left}}
+</style>
+</head>
+<body>
+
+<div class="marquee-bar">
+  <span>📦 BRANDING & PACKAGING ✦ PIXEL OVER PEOPLE ✦ IDENTITY DESIGN ✦ PACKAGE DESIGN ✦ CATALOGUES ✦ MENUS ✦ HANG TAGS ✦ JIGAR JAROLI ✦ UDAIPUR ✦ 📦 BRANDING & PACKAGING ✦ PIXEL OVER PEOPLE ✦ </span>
+</div>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <a class="back-btn" href="../../index.html">← Back to Portfolio</a>
+      <br><br>
+      <div class="hero-tag">04 / SELECTED WORK</div>
+      <h1 class="hero-title">Branding<br><span class="accent">& Packaging.</span></h1>
+      <p class="hero-sub">Brand identity systems, packaging design, product catalogues, restaurant menus & collateral — turning ideas into shelf-ready, print-ready experiences.</p>
+    </div>
+    <div class="hero-meta">
+      <strong id="slotCount">—</strong>
+      CLIENTS
+      <br><br>
+      <strong>BP</strong>
+      BRAND & PACKAGE
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section">
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<footer>
+  <div>© JIGAR JAROLI · PIXEL OVER PEOPLE · UDAIPUR</div>
+  <div>
+    <a href="../../index.html">← PORTFOLIO</a>
+    &nbsp;·&nbsp;
+    <a href="mailto:pixeloverpeople@gmail.com">EMAIL ↗</a>
+    &nbsp;·&nbsp;
+    <a href="https://www.instagram.com/pixel_over_people" target="_blank">INSTAGRAM ↗</a>
+  </div>
+</footer>
+
+<script>
+const clients = [
+  {
+    num:"01", slug:"eklingnath-makhana", cls:"eklingnath",
+    name:"Eklingnath Makhana",
+    fullname:"Makhana Packaging Design",
+    desc:"Traditional Rajasthani food packaging with Hindi typography, lotus motifs and a dramatic gold-spotlight product reveal.",
+    thumb:"eklingnath-makhana/eklingnath-1.jpg",
+    tags:["Packaging","FMCG","Hindi Typography","Food Brand"],
+    pieces:"1 packaging mockup"
+  },
+  {
+    num:"02", slug:"just-makhana", cls:"just-makhana",
+    name:"Just Makhana",
+    fullname:"Brand & Packaging Design",
+    desc:"Minimal wellness-forward makhana brand — clean green palette, yoga motif, FSSAI-compliant label design front and back.",
+    thumb:"just-makhana/just-makhana-1.jpg",
+    tags:["Packaging","Wellness Brand","Minimal","Food Label"],
+    pieces:"1 packaging mockup"
+  },
+  {
+    num:"03", slug:"flavors-menu", cls:"flavors",
+    name:"Flavors Restaurant",
+    fullname:"Restaurant Menu Design — Hotel Utsav Palace",
+    desc:"Full bi-fold & tri-fold menu system for Flavors restaurant — teal, orange & cream palette with bilingual Hindi-English typesetting.",
+    thumb:"flavors-menu/flavors-1.jpg",
+    tags:["Menu Design","Restaurant","Bilingual","Print"],
+    pieces:"3 menu mockups"
+  },
+  {
+    num:"04", slug:"hey-concrete", cls:"hey-concrete",
+    name:"Hey Concrete",
+    fullname:"Product Catalogue Design — Surfaces by Hey",
+    desc:"Premium architectural materials catalogue — dark editorial aesthetic, product specification sheets, panel catalogue & company brochure.",
+    thumb:"hey-concrete/hey-concrete-1.jpg",
+    tags:["Catalogue","Architecture","Editorial","Brand Identity"],
+    pieces:"5 catalogue mockups"
+  },
+  {
+    num:"05", slug:"yu-j-clothing", cls:"yuj",
+    name:"YU-J Clothing",
+    fullname:"Hang Tag Design — A Door to Your Dreams",
+    desc:"Bold B&W boarding-pass-style hang tags for YU-J's debut collection — airplane ticket aesthetic meets fashion label.",
+    thumb:"yu-j-clothing/yuj-1.jpg",
+    tags:["Hang Tag","Fashion","B&W","Label Design"],
+    pieces:"4 tag mockups"
+  }
+];
+
+document.getElementById('slotCount').textContent = clients.length.toString().padStart(2,'0');
+
+const grid = document.getElementById('galleryGrid');
+clients.forEach(c => {
+  const card = document.createElement('a');
+  card.className = `client-card ${c.cls}`;
+  card.href = `./${c.slug}/`;
+  const tagsHtml = c.tags.map(t => `<span class="card-tag">${t}</span>`).join('');
+  card.innerHTML = `
+    <div class="card-thumb">
+      <div class="num-badge">${c.num}</div>
+      <img src="${c.thumb}" alt="${c.name}" loading="lazy"
+        onerror="this.outerHTML='&lt;div class=placeholder&gt;&lt;div class=icon&gt;📦&lt;/div&gt;&lt;div class=name&gt;${c.name}&lt;/div&gt;&lt;/div&gt;'"/>
+      <div class="view-badge">VIEW GALLERY ↗</div>
+    </div>
+    <div class="card-body">
+      <div class="card-num">■ ${c.num}</div>
+      <div class="card-title">${c.name}</div>
+      <div class="card-sub">${c.fullname} · ${c.pieces}</div>
+      <div class="card-tags">${tagsHtml}</div>
+    </div>`;
+  grid.appendChild(card);
+});
+
+const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:.08});
+document.querySelectorAll('.client-card').forEach(c => io.observe(c));
+</script>
+</body>
+</html>
