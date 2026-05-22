@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Logos — Pixel Over People</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=VT323&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1410; --cream:#FFF4D6; --yellow:#FFC93C; --pink:#ED1E79;
+    --aangan:#9B7A4F; --pmart:#22A876; --flavors:#E63946; --david:#D4A017;
+    --nishant:#FF6B35; --marca:#5B3FA0; --kraft:#7A5C3B;
+    --wik:#1A6FF0; --bjs:#E85D04; --lb:#1B4FA0; --amo:#D4A017;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Space Mono',monospace;background:#fff;color:var(--ink);overflow-x:hidden;min-height:100vh}
+  ::selection{background:var(--ink);color:var(--yellow)}
+
+  .marquee-bar{background:var(--ink);color:var(--cream);padding:10px 0;overflow:hidden;white-space:nowrap;font-family:'VT323',monospace;font-size:20px;letter-spacing:.15em;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--pink)}
+  .marquee-bar span{display:inline-block;padding-left:100%;animation:marquee 38s linear infinite}
+  @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+
+  .hero{padding:60px 5vw 50px;background:var(--cream);color:var(--ink);position:relative;overflow:hidden;border-bottom:5px solid var(--ink)}
+  .hero-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(26,20,16,.18) 1.5px,transparent 1.5px);background-size:24px 24px;opacity:.5;pointer-events:none}
+  .hero-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;position:relative;z-index:2}
+  @media(max-width:768px){.hero-inner{grid-template-columns:1fr;gap:24px}}
+  .back-btn{display:inline-block;padding:8px 16px;background:var(--ink);color:var(--yellow);text-decoration:none;font-family:'VT323',monospace;font-size:18px;letter-spacing:.1em;border:3px solid var(--ink);box-shadow:5px 5px 0 var(--pink);transition:transform .15s,box-shadow .15s}
+  .back-btn:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--pink)}
+  .crumb{font-family:'VT323',monospace;font-size:16px;letter-spacing:.15em;color:#5a4f48;margin-top:18px}
+  .crumb a{color:var(--ink);text-decoration:none;font-weight:700}
+  .crumb a:hover{color:var(--pink)}
+  .hero-tag{display:inline-block;margin-top:18px;padding:6px 14px;background:var(--pink);color:#fff;font-family:'VT323',monospace;font-size:18px;letter-spacing:.15em;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+  .hero-title{font-family:'Bowlby One',sans-serif;font-size:clamp(56px,9vw,128px);line-height:.9;letter-spacing:-.02em;margin-top:18px;color:var(--ink)}
+  .hero-title em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--pink)}
+  .hero-sub{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(18px,2.4vw,26px);max-width:600px;margin-top:18px;color:#3a322c;line-height:1.4}
+  .hero-meta{font-family:'VT323',monospace;font-size:18px;letter-spacing:.12em;color:#3a322c;text-align:right;line-height:1.5}
+  .hero-meta strong{font-family:'Bowlby One',sans-serif;font-size:48px;color:var(--pink);display:block;letter-spacing:-.02em;line-height:1}
+
+  .gallery-section{padding:50px 5vw 80px;max-width:1400px;margin:0 auto}
+  .section-label{display:inline-block;padding:6px 14px;background:var(--ink);color:var(--yellow);font-family:'VT323',monospace;font-size:18px;letter-spacing:.15em;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--pink);margin-bottom:30px}
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:32px}
+  .brand-card{background:#fff;border:3px solid var(--ink);overflow:hidden;cursor:pointer;transition:transform .25s,box-shadow .25s,opacity .35s;opacity:0;transform:translateY(20px);text-decoration:none;color:inherit;display:flex;flex-direction:column}
+  .brand-card.visible{opacity:1;transform:none}
+  .brand-card:hover{transform:translate(4px,4px)}
+  /* each card gets its brand accent as the offset shadow */
+  .c-aangan{box-shadow:8px 8px 0 var(--aangan)} .c-aangan:hover{box-shadow:4px 4px 0 var(--aangan)}
+  .c-pmart{box-shadow:8px 8px 0 var(--pmart)} .c-pmart:hover{box-shadow:4px 4px 0 var(--pmart)}
+  .c-flavors{box-shadow:8px 8px 0 var(--flavors)} .c-flavors:hover{box-shadow:4px 4px 0 var(--flavors)}
+  .c-david{box-shadow:8px 8px 0 var(--david)} .c-david:hover{box-shadow:4px 4px 0 var(--david)}
+  .c-nishant{box-shadow:8px 8px 0 var(--nishant)} .c-nishant:hover{box-shadow:4px 4px 0 var(--nishant)}
+  .c-marca{box-shadow:8px 8px 0 var(--marca)} .c-marca:hover{box-shadow:4px 4px 0 var(--marca)}
+  .c-kraft{box-shadow:8px 8px 0 var(--kraft)} .c-kraft:hover{box-shadow:4px 4px 0 var(--kraft)}
+  .c-wik{box-shadow:8px 8px 0 var(--wik)} .c-wik:hover{box-shadow:4px 4px 0 var(--wik)}
+  .c-bjs{box-shadow:8px 8px 0 var(--bjs)} .c-bjs:hover{box-shadow:4px 4px 0 var(--bjs)}
+  .c-lb{box-shadow:8px 8px 0 var(--lb)} .c-lb:hover{box-shadow:4px 4px 0 var(--lb)}
+  .c-amo{box-shadow:8px 8px 0 var(--amo)} .c-amo:hover{box-shadow:4px 4px 0 var(--amo)}
+  .card-thumb{position:relative;width:100%;aspect-ratio:1;background:#F5F1EA;overflow:hidden}
+  .card-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+  .brand-card:hover .card-thumb img{transform:scale(1.04)}
+  .num-badge{position:absolute;top:12px;left:12px;background:var(--yellow);color:var(--ink);padding:4px 10px;font-family:'VT323',monospace;font-size:18px;letter-spacing:.1em;border:3px solid var(--ink);z-index:2}
+  .pieces-badge{position:absolute;bottom:12px;right:12px;background:var(--ink);color:var(--cream);padding:4px 10px;font-family:'VT323',monospace;font-size:14px;letter-spacing:.1em;border:3px solid var(--ink);z-index:2}
+  .card-body{padding:20px 20px 22px;background:#fff;border-top:3px solid var(--ink);flex:1;display:flex;flex-direction:column}
+  .card-name{font-family:'Bowlby One',sans-serif;font-size:24px;letter-spacing:-.01em;color:var(--ink);line-height:1;margin-bottom:6px}
+  .card-fullname{font-family:'Instrument Serif',serif;font-style:italic;font-size:17px;color:#3a322c;line-height:1.3;margin-bottom:14px}
+  .card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}
+  .card-tag{font-family:'VT323',monospace;font-size:11px;letter-spacing:.1em;padding:3px 7px;border:2px solid var(--ink);background:var(--ink);color:var(--yellow)}
+  .placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;background:#F5F1EA;color:#777;text-align:center;font-family:'VT323',monospace;font-size:14px;height:100%;min-height:200px}
+  .placeholder .icon{font-size:40px;margin-bottom:10px}
+
+  footer{background:var(--ink);color:var(--cream);border-top:5px solid var(--yellow);padding:32px 5vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;font-family:'VT323',monospace;font-size:16px;letter-spacing:.1em;margin-top:40px}
+  footer a{color:var(--yellow);text-decoration:none}
+  footer a:hover{color:var(--pink)}
+  @media(max-width:600px){.hero-meta{text-align:left}}
+</style>
+</head>
+<body>
+
+<div class="marquee-bar">
+  <span>🔷 LOGO DESIGN ✦ BRAND IDENTITY ✦ FULL MOCKUP SYSTEMS ✦ HOSPITALITY ✦ RETAIL ✦ FINANCE ✦ FASHION ✦ NON-PROFIT ✦ PIXEL OVER PEOPLE ✦ JIGAR JAROLI ✦ UDAIPUR ✦ 🔷 </span>
+</div>
+
+<section class="hero">
+  <div class="hero-dots"></div>
+  <div class="hero-inner">
+    <div>
+      <a class="back-btn" href="../../index.html">← Back to Portfolio</a>
+      <div class="crumb">PORTFOLIO / <span style="color:var(--pink)">LOGOS</span></div>
+      <div class="hero-tag">02 / SELECTED WORK</div>
+      <h1 class="hero-title"><em>Logos.</em></h1>
+      <p class="hero-sub">Logomarks, monograms, signatures &amp; emblems applied across full brand identity mockup systems — signage, merch, stationery, packaging.</p>
+    </div>
+    <div class="hero-meta">
+      <strong id="cnt">11</strong>
+      BRANDS
+      <br><br>
+      <strong>LG</strong>
+      LOGO DESIGN
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section">
+  <div class="section-label">■ BRAND GALLERIES — TAP TO EXPLORE</div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<footer>
+  <div>© JIGAR JAROLI · PIXEL OVER PEOPLE · UDAIPUR</div>
+  <div>
+    <a href="../../index.html">← PORTFOLIO</a>
+    &nbsp;·&nbsp;
+    <a href="mailto:pixeloverpeople@gmail.com">EMAIL ↗</a>
+    &nbsp;·&nbsp;
+    <a href="https://www.instagram.com/pixel_over_people" target="_blank">INSTAGRAM ↗</a>
+  </div>
+</footer>
+
+<script>
+// EDIT THIS ARRAY to add or reorder brands.
+const clients = [
+  { num:"01", slug:"aangan-homes",       cls:"c-aangan",  name:"Aangan Homes",       fullname:"Real Estate Brand Identity",            thumb:"aangan-homes/aangan-1.jpg",       tags:["Real Estate","Premium","Identity"],     pieces:"6 mockups" },
+  { num:"02", slug:"p-mart",             cls:"c-pmart",   name:"P-Mart",             fullname:"Retail Supermarket Identity",           thumb:"p-mart/pmart-1.jpg",              tags:["Retail","Supermarket","Logo"],          pieces:"6 mockups" },
+  { num:"03", slug:"flavors",            cls:"c-flavors", name:"Flavors",            fullname:"Restaurant Brand Identity",             thumb:"flavors/flavors-1.jpg",           tags:["F&B","Restaurant","Identity"],          pieces:"4 mockups" },
+  { num:"04", slug:"david-tattoo",       cls:"c-david",   name:"David Tattoo",       fullname:"Tattoo Studio Brand Identity",          thumb:"david-tattoo/dt-1.jpg",           tags:["Studio","Tattoo","Identity"],           pieces:"6 mockups" },
+  { num:"05", slug:"nishant-lubricants", cls:"c-nishant", name:"Nishant Lubricants", fullname:"Industrial Brand Identity",             thumb:"nishant-lubricants/nl-1.jpg",     tags:["Industrial","Auto","Identity"],         pieces:"4 mockups" },
+  { num:"06", slug:"marca-global",       cls:"c-marca",   name:"Marca Global",       fullname:"International Brand Identity",          thumb:"marca-global/marca-1.jpg",        tags:["Global","Corporate","Identity"],        pieces:"4 mockups" },
+  { num:"07", slug:"kraftkala-stones",   cls:"c-kraft",   name:"KraftKala Stones",   fullname:"Artisan Stone Brand Identity",          thumb:"kraftkala-stones/ks-1.jpg",       tags:["Artisan","Stone","Identity"],           pieces:"4 mockups" },
+  { num:"08", slug:"wik-idup",           cls:"c-wik",     name:"Wik-Idup",           fullname:"Tech Studio Brand Identity",            thumb:"wik-idup/wik-1.jpg",              tags:["Tech","Dev Studio","Neon","Identity"],  pieces:"4 mockups" },
+  { num:"09", slug:"bjs-yuva",           cls:"c-bjs",     name:"BJS Yuva",           fullname:"Youth Wing Brand Identity",             thumb:"bjs-yuva/bjs-1.jpg",              tags:["Non-Profit","Hindi","Saffron","Youth"], pieces:"4 mockups" },
+  { num:"10", slug:"learning-bazaar",    cls:"c-lb",      name:"Learning Bazaar",    fullname:"Finance Education Brand Identity",      thumb:"learning-bazaar/lb-2.jpg",        tags:["Finance","Education","EdTech"],         pieces:"4 mockups" },
+  { num:"11", slug:"amodini",            cls:"c-amo",     name:"Amodini",            fullname:"Fashion Label Brand Identity",          thumb:"amodini/amodini-1.jpg",           tags:["Fashion","Luxury","Gold Foil"],         pieces:"3 mockups" },
+];
+
+document.getElementById('cnt').textContent = clients.length.toString().padStart(2,'0');
+
+const grid = document.getElementById('galleryGrid');
+clients.forEach(c => {
+  const a = document.createElement('a');
+  a.className = 'brand-card ' + c.cls;
+  a.href = c.slug + '/';
+  const tagsHtml = c.tags.map(t => `<span class="card-tag">${t}</span>`).join('');
+  a.innerHTML = `
+    <div class="card-thumb">
+      <div class="num-badge">${c.num}</div>
+      <div class="pieces-badge">${c.pieces}</div>
+      <img src="${c.thumb}" alt="${c.name}" loading="lazy"
+        onerror="this.outerHTML='<div class=placeholder><div class=icon>🔷</div><div>UPLOAD<br>'+'${c.thumb}'+'</div></div>'"/>
+    </div>
+    <div class="card-body">
+      <div class="card-name">${c.name}</div>
+      <div class="card-fullname">${c.fullname}</div>
+      <div class="card-tags">${tagsHtml}</div>
+    </div>`;
+  grid.appendChild(a);
+});
+
+const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:.08});
+document.querySelectorAll('.brand-card').forEach(c => io.observe(c));
+</script>
+</body>
+</html>
