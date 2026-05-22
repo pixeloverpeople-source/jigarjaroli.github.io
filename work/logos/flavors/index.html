@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Flavors — Logos — Pixel Over People</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=VT323&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&family=Cormorant+Garamond:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{--acc:#0097A7;--light:#E0F7FA;--gold:#C9A961;--ink:#1A1410;--yellow:#FFC93C}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Space Mono',monospace;background:var(--light);color:var(--ink);overflow-x:hidden}
+  .marquee-bar{background:var(--ink);color:var(--acc);padding:10px 0;overflow:hidden;white-space:nowrap;font-family:'VT323',monospace;font-size:20px;letter-spacing:.15em;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--gold)}
+  .marquee-bar span{display:inline-block;animation:scroll 35s linear infinite;padding-right:60px}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .breadcrumb{background:var(--light);padding:14px 5vw;border-bottom:2px dashed var(--acc);font-family:'VT323',monospace;font-size:15px;letter-spacing:.1em}
+  .breadcrumb a{color:var(--ink);text-decoration:none;transition:color .2s}.breadcrumb a:hover{color:var(--acc)}.breadcrumb .sep{margin:0 8px;color:var(--acc);opacity:.5}.breadcrumb .current{color:var(--acc);font-weight:bold}
+  .hero{background:var(--acc);padding:50px 5vw 40px;position:relative;overflow:hidden;border-bottom:4px solid var(--gold)}
+  .hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.2) 1.5px,transparent 1.5px);background-size:30px 30px;pointer-events:none}
+  .hero-inner{position:relative;z-index:2;max-width:1300px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  .back-btn{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:#fff;text-decoration:none;font-family:'VT323',monospace;font-size:18px;letter-spacing:.1em;padding:10px 20px;border:3px solid var(--gold);box-shadow:4px 4px 0 #005B6E;transition:all .2s}
+  .back-btn:hover{background:var(--yellow);color:var(--ink);box-shadow:6px 6px 0 var(--acc)}
+  .hero-tag{display:inline-block;background:var(--gold);color:#fff;padding:6px 16px;font-family:'VT323',monospace;font-size:22px;letter-spacing:.1em;border:3px solid #fff;box-shadow:4px 4px 0 #005B6E;transform:rotate(-1.5deg);margin-bottom:16px;margin-top:20px}
+  .hero-title{font-family:'Bowlby One',sans-serif;font-size:clamp(40px,9vw,110px);line-height:.88;letter-spacing:-.04em;color:#fff;text-shadow:5px 5px 0 #005B6E}
+  .hero-sub{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(15px,2vw,20px);color:#B2EBF2;margin-top:14px;opacity:.95;max-width:600px}
+  .hero-meta{font-family:'VT323',monospace;font-size:16px;color:#B2EBF2;letter-spacing:.1em;text-align:right}
+  .hero-meta strong{color:var(--gold);font-size:28px;display:block}
+  .section{max-width:1300px;margin:0 auto;padding:50px 5vw}
+  .section-label{font-family:'VT323',monospace;font-size:16px;letter-spacing:.2em;color:var(--acc);text-align:center;margin-bottom:6px}
+  .section-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(28px,5vw,42px);color:var(--ink);text-align:center;margin-bottom:32px}
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px}
+  .card{background:#fff;border:3px solid var(--ink);box-shadow:8px 8px 0 var(--acc);overflow:hidden;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;opacity:0;transform:translateY(28px);cursor:pointer}
+  .card.visible{opacity:1;transform:translateY(0);transition:opacity .5s ease,transform .5s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
+  .card:hover{transform:translateY(-5px);box-shadow:12px 12px 0 var(--gold)}
+  .card-img-wrap{position:relative;aspect-ratio:4/3;overflow:hidden;background:#fff}
+  .card-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+  .card:hover .card-img-wrap img{transform:scale(1.04)}
+  .img-badge{position:absolute;top:10px;left:10px;background:var(--acc);color:#fff;font-family:'VT323',monospace;font-size:12px;letter-spacing:.12em;padding:4px 9px;border:2px solid #fff;z-index:2}
+  .zoom-badge{position:absolute;bottom:10px;right:10px;background:var(--gold);color:#fff;font-family:'VT323',monospace;font-size:12px;padding:4px 9px;border:2px solid #fff;z-index:2;opacity:0;transition:opacity .25s}
+  .card:hover .zoom-badge{opacity:1}
+  .card-caption{padding:14px 16px;background:#fff;border-top:2px solid var(--ink)}
+  .card-caption .label{font-family:'VT323',monospace;font-size:12px;letter-spacing:.12em;color:var(--acc);margin-bottom:3px}
+  .card-caption .title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:17px;color:var(--ink)}
+  .lb-overlay{position:fixed;inset:0;z-index:1000;background:rgba(26,20,16,.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px}
+  .lb-overlay.open{opacity:1;pointer-events:all}
+  .lb-box{position:relative;max-width:1100px;width:100%;transform:scale(.93);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+  .lb-overlay.open .lb-box{transform:scale(1)}
+  .lb-media-wrap{border:4px solid var(--gold);box-shadow:12px 12px 0 var(--acc);background:#fff;overflow:hidden}
+  .lb-media-wrap img{width:100%;display:block;max-height:78vh;object-fit:contain;background:#fff}
+  .lb-close{position:absolute;top:-18px;right:-18px;width:42px;height:42px;background:var(--acc);border:3px solid var(--ink);color:#fff;font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
+  .lb-close:hover{background:var(--gold)}
+  .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;background:var(--acc);border:3px solid #fff;color:#fff;font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
+  .lb-prev{left:-20px}.lb-next{right:-20px}.lb-nav:hover{background:var(--gold)}
+  .lb-info{margin-top:14px;color:#fff;text-align:center}
+  .lb-label{font-family:'VT323',monospace;font-size:14px;letter-spacing:.12em;color:var(--gold)}
+  .lb-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:22px}
+  .lb-counter{font-family:'VT323',monospace;font-size:13px;opacity:.7;margin-top:6px}
+  footer{background:var(--ink);color:#fff;border-top:4px solid var(--acc);padding:28px 5vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;font-family:'VT323',monospace;font-size:16px;letter-spacing:.1em}
+  footer a{color:var(--gold);text-decoration:none}
+  @media(max-width:600px){.lb-prev{left:5px}.lb-next{right:5px}.lb-close{top:-10px;right:5px}}
+</style>
+</head>
+<body>
+<div class="marquee-bar"><span>🌿 FLAVORS ✦ RESTAURANT BRAND IDENTITY ✦ BY UTSAV ✦ PURE VEGETARIAN ✦ TEAL & GOLD LOGO ✦ HOTEL UTSAV PALACE ✦ PIXEL OVER PEOPLE ✦ JIGAR JAROLI ✦ UDAIPUR ✦ </span></div>
+<nav class="breadcrumb"><a href="../../../index.html">PORTFOLIO</a><span class="sep">/</span><a href="../index.html">LOGOS</a><span class="sep">/</span><span class="current">FLAVORS</span></nav>
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <a class="back-btn" href="../index.html">← All Logos</a><br><br>
+      <div class="hero-tag">RESTAURANT BRAND IDENTITY</div>
+      <h1 class="hero-title">Flavors.</h1>
+      <p class="hero-sub">Elegant tree-motif logomark for a pure vegetarian restaurant at Hotel Utsav Palace, Fatehnagar — teal & gold applied across coffee cups, menu book, store signage and chef apron.</p>
+    </div>
+    <div class="hero-meta"><strong>04</strong>MOCKUPS<br><br><strong>LG</strong>LOGO DESIGN</div>
+  </div>
+</section>
+<section class="section">
+  <div class="section-label">— 04 BRAND MOCKUPS —</div>
+  <h2 class="section-title">Logo Applied Across Restaurant Touchpoints</h2>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+<div class="lb-overlay" id="lb"><div class="lb-box"><button class="lb-close" id="lbClose">×</button><button class="lb-nav lb-prev" id="lbPrev">‹</button><button class="lb-nav lb-next" id="lbNext">›</button><div class="lb-media-wrap"><img id="lbImg" src="" alt=""/></div><div class="lb-info"><div class="lb-label" id="lbLabel"></div><div class="lb-title" id="lbTitle"></div><div class="lb-counter" id="lbCounter"></div></div></div></div>
+<footer><div>© JIGAR JAROLI · PIXEL OVER PEOPLE · UDAIPUR</div><div><a href="../index.html">← ALL LOGOS</a>&nbsp;·&nbsp;<a href="../../../index.html">PORTFOLIO</a>&nbsp;·&nbsp;<a href="mailto:pixeloverpeople@gmail.com">EMAIL ↗</a></div></footer>
+<script>
+const items=[
+  {src:"flavors-1.jpg", label:"01 / COFFEE CUPS",     title:"Flavors Logo on Branded Paper Coffee Cups — Teal & Cream"},
+  {src:"flavors-2.jpg", label:"02 / STORE SIGNAGE",   title:"Logo on Restaurant Exterior Fascia — Dark & Gold at Night"},
+  {src:"flavors-3.jpg", label:"03 / MENU BOOK COVER", title:"Gold Foil Embossed Logo on Teal Fabric Menu Book"},
+  {src:"flavors-4.jpg", label:"04 / CHEF APRON",      title:"Flavors Logo on White Chef Apron — Teal Print"},
+];
+const grid=document.getElementById('galleryGrid');
+items.forEach((it,i)=>{
+  const c=document.createElement('div');c.className='card';
+  c.innerHTML=`<div class="card-img-wrap"><div class="img-badge">${it.label.split('/')[0].trim()}</div><img src="${it.src}" alt="${it.title}" loading="lazy"/><div class="zoom-badge">VIEW ↗</div></div><div class="card-caption"><div class="label">■ ${it.label}</div><div class="title">${it.title}</div></div>`;
+  c.addEventListener('click',()=>openLb(i));grid.appendChild(c);
+});
+const lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg'),lbLabel=document.getElementById('lbLabel'),lbTitle=document.getElementById('lbTitle'),lbCounter=document.getElementById('lbCounter');
+let idx=0;
+function openLb(i){idx=i;upd();lb.classList.add('open');document.body.style.overflow='hidden';}
+function closeLb(){lb.classList.remove('open');document.body.style.overflow='';}
+function upd(){const it=items[idx];lbImg.src=it.src;lbLabel.textContent='■ '+it.label;lbTitle.textContent=it.title;lbCounter.textContent=`${idx+1} / ${items.length}`;}
+document.getElementById('lbClose').onclick=closeLb;
+document.getElementById('lbNext').onclick=()=>{idx=(idx+1)%items.length;upd();};
+document.getElementById('lbPrev').onclick=()=>{idx=(idx-1+items.length)%items.length;upd();};
+lb.onclick=e=>{if(e.target===lb)closeLb();};
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')closeLb();if(e.key==='ArrowRight'){idx=(idx+1)%items.length;upd();}if(e.key==='ArrowLeft'){idx=(idx-1+items.length)%items.length;upd();}});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:.08});
+document.querySelectorAll('.card').forEach(c=>io.observe(c));
+</script>
+</body></html>
