@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>3D Renders — Jigar Jaroli</title>
+<meta name="description" content="3D interior and exterior architectural renders by Jigar Jaroli — modelled in SketchUp, visualised in Lumion, enhanced with AI render workflows." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=VT323&family=Instrument+Serif:ital@1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F4EEE2;
+    --ink:#141414;
+    --yellow:#FFD84D;
+    --pink:#FF5C8A;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Space Mono',monospace;
+    overflow-x:hidden;
+  }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:60;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:16px;
+    padding:14px 20px;
+    background:var(--ink);
+    border-bottom:4px solid var(--ink);
+  }
+  .back{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'VT323',monospace;font-size:20px;
+    color:var(--yellow);text-decoration:none;
+    border:3px solid var(--yellow);
+    padding:4px 14px;
+    background:transparent;
+    transition:transform .15s ease, background .15s ease, color .15s ease;
+  }
+  .back:hover{background:var(--yellow);color:var(--ink);transform:translate(-2px,-2px)}
+  .topbar-brand{
+    font-family:'VT323',monospace;font-size:20px;
+    color:var(--cream);letter-spacing:2px;
+    opacity:.8;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:#fff;
+    border-bottom:4px solid var(--ink);
+    padding:56px 20px 48px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-label{
+    font-family:'VT323',monospace;
+    font-size:20px;letter-spacing:3px;
+    color:var(--ink);opacity:.65;
+    margin-bottom:14px;
+  }
+  .hero h1{
+    font-family:'Bowlby One',cursive;
+    font-size:clamp(38px,8vw,86px);
+    line-height:.95;
+    letter-spacing:-1px;
+    color:var(--ink);
+    text-transform:uppercase;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--pink);
+  }
+  .hero-sub{
+    font-family:'Instrument Serif',serif;
+    font-style:italic;
+    font-size:clamp(16px,2.4vw,24px);
+    margin-top:18px;
+    opacity:.8;
+    max-width:640px;
+    margin-left:auto;margin-right:auto;
+  }
+  .hero-tools{
+    display:flex;flex-wrap:wrap;gap:8px;
+    justify-content:center;
+    margin-top:24px;
+  }
+  .tool-chip{
+    font-family:'VT323',monospace;
+    font-size:17px;letter-spacing:1px;
+    border:3px solid var(--ink);
+    background:var(--yellow);
+    padding:3px 12px;
+    box-shadow:3px 3px 0 var(--ink);
+  }
+
+  /* ---------- FILTER BAR ---------- */
+  .filters{
+    display:flex;flex-wrap:wrap;gap:10px;
+    justify-content:center;
+    padding:28px 20px 4px;
+  }
+  .filter-btn{
+    font-family:'VT323',monospace;
+    font-size:19px;letter-spacing:1px;
+    border:3px solid var(--ink);
+    background:var(--cream);
+    color:var(--ink);
+    padding:4px 16px;
+    cursor:pointer;
+    box-shadow:3px 3px 0 var(--ink);
+    transition:transform .12s ease, background .12s ease, color .12s ease;
+  }
+  .filter-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+  .filter-btn.active{background:var(--ink);color:var(--yellow)}
+
+  /* ---------- GRID ---------- */
+  .grid-wrap{max-width:1240px;margin:0 auto;padding:28px 20px 80px}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:26px;
+  }
+  .card{
+    border:4px solid var(--ink);
+    background:#fff;
+    box-shadow:6px 6px 0 var(--ink);
+    overflow:hidden;
+    cursor:pointer;
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .5s ease, transform .5s ease, box-shadow .18s ease;
+  }
+  .card.in{opacity:1;transform:translateY(0)}
+  .card:hover{box-shadow:10px 10px 0 var(--pink);transform:translateY(-4px)}
+  .card-media{
+    position:relative;
+    aspect-ratio:4/3;
+    background:var(--cream);
+    border-bottom:4px solid var(--ink);
+    overflow:hidden;
+  }
+  .card-media img{
+    width:100%;height:100%;
+    object-fit:cover;display:block;
+  }
+  /* striped placeholder shown when image is missing */
+  .ph{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:8px;
+    background:repeating-linear-gradient(
+      45deg,
+      var(--cream) 0 14px,
+      #e6dccb 14px 28px
+    );
+  }
+  .ph-tag{
+    font-family:'VT323',monospace;
+    font-size:20px;letter-spacing:2px;
+    border:3px solid var(--ink);
+    background:var(--yellow);
+    padding:2px 12px;
+  }
+  .ph-file{
+    font-family:'Space Mono',monospace;
+    font-size:12px;opacity:.7;
+  }
+  .card-body{padding:14px 16px 16px}
+  .card-num{
+    font-family:'VT323',monospace;
+    font-size:18px;color:var(--pink);letter-spacing:2px;
+  }
+  .card-title{
+    font-family:'Bowlby One',cursive;
+    font-size:19px;line-height:1.15;
+    margin-top:2px;text-transform:uppercase;
+  }
+  .card-meta{
+    font-family:'Instrument Serif',serif;
+    font-style:italic;font-size:15px;
+    opacity:.7;margin-top:6px;
+  }
+
+  /* ---------- LIGHTBOX ---------- */
+  .lb{
+    position:fixed;inset:0;z-index:100;
+    display:none;
+    align-items:center;justify-content:center;
+    background:rgba(20,20,20,.94);
+    padding:24px;
+  }
+  .lb.open{display:flex}
+  .lb img{
+    max-width:92vw;max-height:80vh;
+    border:4px solid var(--cream);
+    box-shadow:8px 8px 0 var(--pink);
+  }
+  .lb-cap{
+    position:absolute;bottom:22px;left:0;right:0;
+    text-align:center;
+    font-family:'VT323',monospace;
+    font-size:22px;color:var(--cream);letter-spacing:2px;
+  }
+  .lb-btn{
+    position:absolute;top:50%;transform:translateY(-50%);
+    font-family:'Bowlby One',cursive;font-size:26px;
+    background:var(--yellow);color:var(--ink);
+    border:4px solid var(--cream);
+    width:54px;height:54px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .lb-prev{left:18px}
+  .lb-next{right:18px}
+  .lb-close{
+    position:absolute;top:18px;right:18px;
+    font-family:'Bowlby One',cursive;font-size:22px;
+    background:var(--pink);color:var(--cream);
+    border:4px solid var(--cream);
+    width:48px;height:48px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* ---------- FOOTER ---------- */
+  .foot{
+    border-top:4px solid var(--ink);
+    background:var(--ink);
+    color:var(--cream);
+    text-align:center;
+    padding:26px 20px;
+    font-family:'VT323',monospace;
+    font-size:19px;letter-spacing:2px;
+  }
+  .foot a{color:var(--yellow);text-decoration:none;border-bottom:2px solid var(--yellow)}
+
+  @media(max-width:560px){
+    .grid{grid-template-columns:1fr;gap:20px}
+    .lb-btn{width:44px;height:44px;font-size:20px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back" href="../../index.html">← BACK</a>
+  <div class="topbar-brand">PIXEL OVER PEOPLE</div>
+</div>
+
+<header class="hero">
+  <div class="hero-label">— WORK / 08 —</div>
+  <h1>3D <em>Renders</em></h1>
+  <p class="hero-sub">Interior &amp; exterior architectural visualisation for hospitality — surface, material, and light studies from massing to final frame.</p>
+  <div class="hero-tools">
+    <span class="tool-chip">SketchUp</span>
+    <span class="tool-chip">Lumion</span>
+    <span class="tool-chip">AI Renders</span>
+  </div>
+</header>
+
+<div class="filters" id="filters"></div>
+
+<div class="grid-wrap">
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="lb" id="lb">
+  <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+  <img id="lbImg" src="" alt="" />
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next">›</button>
+  <div class="lb-cap" id="lbCap"></div>
+</div>
+
+<footer class="foot">
+  © 2026 JIGAR JAROLI — <a href="../../index.html">PIXEL OVER PEOPLE</a>
+</footer>
+
+<script>
+/* ============================================================
+   EDIT THIS LIST TO ADD / REMOVE RENDERS
+   cat: "Interior" | "Exterior"  (used by the filter bar)
+   src: filename of the image inside this same folder
+   ============================================================ */
+const items = [
+  { num:"01", title:"Reception",            cat:"Interior", meta:"Fluted terracotta feature wall · backlit reveals", src:"render-1.jpg" },
+  { num:"02", title:"Pool Side",            cat:"Exterior", meta:"Jali-cut stone facade · dusk lighting study", src:"render-2.jpg" },
+  { num:"03", title:"Entrance",             cat:"Exterior", meta:"Stacked stone portal · sculptural brass emblem", src:"render-3.jpg" },
+  { num:"04", title:"Courtyard",            cat:"Exterior", meta:"Triangular tile mural · water feature", src:"render-4.jpg" },
+  { num:"05", title:"Garden Area",          cat:"Exterior", meta:"Diamond-grid wall · star-point lighting", src:"render-5.jpg" },
+  { num:"06", title:"Spa",                  cat:"Interior", meta:"Ogee-pattern relief panels · warm cove light", src:"render-6.jpg" },
+  { num:"07", title:"Bar &amp; Restaurant", cat:"Interior", meta:"Leaf-relief panels · crimson accent inlay", src:"render-7.jpg" },
+  { num:"08", title:"Ball Room",            cat:"Interior", meta:"Grid-panelled backdrop · cascade chandelier", src:"render-8.jpg" },
+  { num:"09", title:"Lobby",                cat:"Interior", meta:"Curved fluted wall · sculptural bench", src:"render-9.jpg" },
+];
+
+const grid    = document.getElementById('grid');
+const filters = document.getElementById('filters');
+let activeCat = "All";
+
+/* ---- build filter buttons from the categories present ---- */
+const cats = ["All", ...Array.from(new Set(items.map(i => i.cat)))];
+cats.forEach(c => {
+  const b = document.createElement('button');
+  b.className = 'filter-btn' + (c === "All" ? ' active' : '');
+  b.textContent = c.toUpperCase();
+  b.onclick = () => {
+    activeCat = c;
+    document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    render();
+  };
+  filters.appendChild(b);
+});
+
+/* ---- current visible subset (lightbox respects the filter) ---- */
+function visible(){
+  return activeCat === "All" ? items : items.filter(i => i.cat === activeCat);
+}
+
+function render(){
+  const list = visible();
+  grid.innerHTML = '';
+  list.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-media">
+        <img src="${item.src}" alt="${item.title}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="ph" style="display:none">
+          <div class="ph-tag">UPLOAD IMAGE</div>
+          <div class="ph-file">${item.src}</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-num">${item.num}</div>
+        <div class="card-title">${item.title}</div>
+        <div class="card-meta">${item.meta}</div>
+      </div>`;
+    card.onclick = () => openLb(idx);
+    grid.appendChild(card);
+  });
+  observeCards();
+}
+
+/* ---- fade-in on scroll ---- */
+function observeCards(){
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold:.12 });
+  document.querySelectorAll('.card').forEach(c => io.observe(c));
+}
+
+/* ---- lightbox ---- */
+const lb    = document.getElementById('lb');
+const lbImg = document.getElementById('lbImg');
+const lbCap = document.getElementById('lbCap');
+let cur = 0;
+
+function openLb(i){
+  cur = i;
+  const it = visible()[cur];
+  lbImg.src = it.src;
+  lbCap.textContent = `${it.num} — ${it.title}`;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLb(){
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+function step(d){
+  const list = visible();
+  cur = (cur + d + list.length) % list.length;
+  openLb(cur);
+}
+
+document.getElementById('lbClose').onclick = closeLb;
+document.getElementById('lbPrev').onclick  = e => { e.stopPropagation(); step(-1); };
+document.getElementById('lbNext').onclick  = e => { e.stopPropagation(); step(1);  };
+lb.onclick = e => { if(e.target === lb) closeLb(); };
+
+document.addEventListener('keydown', e => {
+  if(!lb.classList.contains('open')) return;
+  if(e.key === 'Escape')     closeLb();
+  if(e.key === 'ArrowLeft')  step(-1);
+  if(e.key === 'ArrowRight') step(1);
+});
+
+render();
+</script>
+
+</body>
+</html>
